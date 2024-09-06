@@ -1,42 +1,35 @@
 package ru.sweetbun;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import ru.sweetbun.models.City;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-
-@Slf4j
 public class Main {
-
-    private static final ObjectMapper mapper = new ObjectMapper();
-
     public static void main(String[] args) {
-        convertFromJsonToXML("city.json", "city.xml");
-        convertFromJsonToXML("city-error.json", "city-error.xml");
-    }
+        //2
+        CustomLinkedList<Integer> list = new CustomLinkedList<>();
 
-    public static void convertFromJsonToXML(String jsonFile, String xmlFile) {
-        log.debug("Начинается конвертирование файла: {}", jsonFile);
-        try {
-            City city = mapper.readValue(new File(jsonFile), City.class);
-            log.info("Объект успешно получен из файла {}", jsonFile);
-            String cityXML = city.toXML();
-            if (cityXML != null) {
-                Files.write(Paths.get(xmlFile), cityXML.getBytes(), StandardOpenOption.CREATE);
-                log.info("XML успешно сохранён в файл {}", xmlFile);
-            } else {
-                log.warn("Преобразование в XML вернуло null для объекта: {}", city);
-            }
-        } catch (JsonMappingException e) {
-            log.error("Ошибка маппинга JSON в файле {}: {}", jsonFile, e.getMessage());
-        } catch (IOException e) {
-            log.error("Ошибка чтения или записи файла {}: {}", jsonFile, e.getMessage());
+        System.out.println(list.add(1));
+        System.out.println(list.get(0));
+        System.out.println(list.remove(0));
+        System.out.println(list.contains(1));
+        System.out.println(list.addAll(new ArrayList<>(List.of(1, 2, 4))));
+
+        //3
+        Stream<Integer> stream = Stream.of(1, 3, 5, 8, 9);
+        CustomLinkedList<Integer> res = stream.reduce(
+                new CustomLinkedList<>(),
+                (list1, element) -> {
+                    list1.add(element);
+                    return list1;
+                },
+                (list1, list2) -> {
+                    for (Integer el : list2) list1.add(el);
+                    return list1;
+                }
+        );
+        for (Integer el : res) {
+            System.out.print(el);
         }
     }
 }
