@@ -12,7 +12,7 @@ public class Storage<T> {
     private final Map<Long, T> storage = new ConcurrentHashMap<>();
     private final AtomicLong idGenerator = new AtomicLong(0);
 
-    public Long create(T entity) {
+    public void create(T entity) {
         Long id = idGenerator.incrementAndGet();
         try {
             var idField = entity.getClass().getDeclaredField("id");
@@ -22,7 +22,6 @@ public class Storage<T> {
             throw new RuntimeException(e);
         }
         storage.put(id, entity);
-        return id;
     }
 
     public Optional<T> findById(Long id) {
