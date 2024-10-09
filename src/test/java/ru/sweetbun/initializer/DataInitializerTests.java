@@ -74,7 +74,7 @@ class DataInitializerTests {
 
         assertNotNull(locations);
         assertEquals(2, locations.size());
-        assertEquals("Екатеринбург", locations.getFirst().getName());
+        assertEquals("Екатеринбург", locations.get(0).getName());
         assertEquals("nsk", locations.get(1).getSlug());
     }
 
@@ -91,7 +91,7 @@ class DataInitializerTests {
 
         assertNotNull(categories);
         assertEquals(2, categories.size());
-        assertEquals("Антикафе", categories.getFirst().getName());
+        assertEquals("Антикафе", categories.get(0).getName());
         assertEquals("airports", categories.get(1).getSlug());
     }
 }
