@@ -1,0 +1,12 @@
+currency:
+  api-url: "http://www.cbr.ru/scripts/XML_daily.asp"
+spring:
+  cache:
+    type: simple
+  application:
+    name: currency-service
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
