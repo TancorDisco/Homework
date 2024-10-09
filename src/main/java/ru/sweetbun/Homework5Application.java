@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 import ru.sweetbun.entity.Category;
 import ru.sweetbun.entity.Location;
+import ru.sweetbun.service.KudaGoService;
 import ru.sweetbun.storage.Storage;
 
 @SpringBootApplication
@@ -28,5 +29,15 @@ public class Homework5Application {
 	@Bean
 	public Storage<Location> locationStorage() {
 		return new Storage<>();
+	}
+
+	@Bean
+	public KudaGoService<Category> categoryService() {
+		return new KudaGoService<>(restTemplate(), categoryStorage());
+	}
+
+	@Bean
+	public KudaGoService<Location> locationService() {
+		return new KudaGoService<>(restTemplate(), locationStorage());
 	}
 }

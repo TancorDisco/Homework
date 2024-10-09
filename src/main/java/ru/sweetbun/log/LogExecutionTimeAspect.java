@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LogExecutionTimeAspect {
 
-    @Around("@within(ru.sweetbun.aspect.LogExecutionTime) || @annotation(ru.sweetbun.aspect.LogExecutionTime)")
+    @Around("@within(ru.sweetbun.log.LogExecutionTime) || @annotation(ru.sweetbun.log.LogExecutionTime)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
 

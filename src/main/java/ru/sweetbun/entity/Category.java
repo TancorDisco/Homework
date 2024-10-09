@@ -1,10 +1,12 @@
 package ru.sweetbun.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class Category {
-    private long id;
+@Builder
+public class Category implements Identifiable {
+    private Long id;
     private String slug;
     private String name;
 }
