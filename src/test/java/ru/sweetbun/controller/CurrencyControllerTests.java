@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CurrencyController.class)
-public class CurrencyControllerTest {
+public class CurrencyControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -28,7 +28,7 @@ public class CurrencyControllerTest {
     private CurrencyService currencyService;
 
     @Test
-    void getCurrencyRate_WhenInvalidCurrency_ShouldReturnNotFound() throws Exception {
+    void getCurrencyRate_WhenInvalidCurrency_ShouldReturnBadRequest() throws Exception {
         when(currencyService.getCurrencyRate(anyString())).thenThrow(IllegalArgumentException.class);
 
         mockMvc.perform(get("/currencies/rates/INVALID")

@@ -40,7 +40,7 @@ public class CurrencyService {
 
     private void validateConvertRequest(ConvertRequest convertRequest) {
         if (convertRequest == null) {
-            throw new IllegalArgumentException("ConvertRequest must not be null");
+            throw new IllegalArgumentException("Request must not be null");
         }
         if (convertRequest.getFromCurrency() == null || convertRequest.getFromCurrency().isEmpty() ||
                 convertRequest.getToCurrency() == null || convertRequest.getToCurrency().isEmpty()) {
