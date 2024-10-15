@@ -5,11 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import ru.sweetbun.DTO.EventsResponse;
+import ru.sweetbun.entity.Event;
 import ru.sweetbun.entity.Identifiable;
 import ru.sweetbun.storage.Storage;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j

@@ -1,0 +1,7 @@
+app:
+  pool:
+    size:
+      thread: 3
+      scheduler: 2
+  initialization:
+    schedule-delay: PT1M
