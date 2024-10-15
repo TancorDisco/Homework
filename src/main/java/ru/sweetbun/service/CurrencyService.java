@@ -32,6 +32,12 @@ public class CurrencyService {
         return convertRequest.getAmount() * (fromRate / toRate);
     }
 
+    public Double convertCurrencyToRUB(String code, Double budget) {
+        validateCurrencyCode(code);
+
+        return externalCurrencyService.getCurrencyRate(code) * budget;
+    }
+
     private void validateCurrencyCode(String code) {
         if (isInvalidCurrency(code)) {
             throw new IllegalArgumentException("Currency not exist");
