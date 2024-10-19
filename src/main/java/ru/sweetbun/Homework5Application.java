@@ -45,4 +45,12 @@ public class Homework5Application {
 	public Storage<Location> locationStorage() {
 		return new Storage<>();
 	}
+
+	@Bean KudaGoService<Category> categoryService() {
+		return new KudaGoService<>(restTemplate(), categoryStorage());
+	}
+
+	@Bean KudaGoService<Location> locationService() {
+		return new KudaGoService<>(restTemplate(), locationStorage());
+	}
 }
