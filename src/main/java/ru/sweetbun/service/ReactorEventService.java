@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Mono;
 import ru.sweetbun.DTO.EventsResponse;
 import ru.sweetbun.entity.Event;
+import ru.sweetbun.exception.CurrencyServiceUnavailableException;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -46,11 +47,18 @@ public class ReactorEventService {
                 + "&order_by=-favorites_count";
         log.info("URL_EVENT of request: {}", url);
 
-        Mono<List<Event>> eventsMono = Mono.fromCallable(() -> fetchEvents(url, EventsResponse.class));
+        Mono<List<Event>> eventsMono = Mono.fromCallable(() -> fetchEvents(url, EventsResponse.class))
+                .onErrorResume(e -> {
+                    log.error("Error fetching events from API: {}", e.getMessage());
+                    return Mono.just(Collections.emptyList());
+                });
 
         Mono<Double> convertedBudgetMono = Mono.fromCallable(() -> {
             if (currency.equalsIgnoreCase("RUB")) return budget;
             return currencyService.convertCurrencyToRUB(currency, budget);
+        }).onErrorResume(e -> {
+            log.error("Error converting currency: {}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
         });
 
         return Mono.zip(eventsMono, convertedBudgetMono)

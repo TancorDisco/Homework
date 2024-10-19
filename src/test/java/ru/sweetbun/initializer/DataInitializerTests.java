@@ -1,4 +1,3 @@
-/*
 package ru.sweetbun.initializer;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
@@ -6,7 +5,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -18,7 +21,11 @@ import ru.sweetbun.entity.Location;
 import ru.sweetbun.service.KudaGoService;
 import ru.sweetbun.storage.Storage;
 
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Testcontainers
 @SpringBootTest
 @ActiveProfiles("test")
-class DataInitializerTests {
+class DataInitializerTests{
 
     @Container
     public static WireMockContainer wiremock = new WireMockContainer("wiremock/wiremock")
@@ -42,6 +49,14 @@ class DataInitializerTests {
     @Autowired
     private Storage<Location> locationStorage;
 
+    @Autowired
+    private ThreadPoolTaskExecutor taskExecutor;
+
+    @Autowired
+    private ScheduledExecutorService taskScheduler;
+
+    private DataInitializer dataInitializer;
+
     private static final String tailCategoryUrl = "/public-api/v1.4/places/categories";
     private static final String tailLocationUrl = "/public-api/v1.4/locations";
 
@@ -55,6 +70,9 @@ class DataInitializerTests {
         String host = wiremock.getHost();
         int port = wiremock.getMappedPort(8080);
         WireMock.configureFor(host, port);
+
+        dataInitializer = new DataInitializer(kudaGoService, categoryStorage, locationStorage,
+                taskExecutor, taskScheduler, Duration.ofMinutes(1));
     }
 
     @AfterEach
@@ -69,7 +87,7 @@ class DataInitializerTests {
                         .withHeader("Content-Type", "application/json")
                         .withBody("[{\"slug\":\"ekb\",\"name\":\"Екатеринбург\"}," +
                                 " {\"slug\":\"nsk\",\"name\":\"Новосибирск\"}]")));
-        new DataInitializer(kudaGoService, categoryStorage, locationStorage).run();
+        dataInitializer.initializeData();
 
         List<Location> locations = kudaGoService.fetchAll(wiremock.getBaseUrl() + tailLocationUrl, Location[].class);
 
@@ -86,7 +104,7 @@ class DataInitializerTests {
                         .withHeader("Content-Type", "application/json")
                         .withBody("[{\"id\":1,\"slug\":\"anticafe\",\"name\":\"Антикафе\"}," +
                                 "{\"id\":2,\"slug\":\"airports\",\"name\":\"Аэропорты\"}]")));
-        new DataInitializer(kudaGoService, categoryStorage, locationStorage).run();
+        dataInitializer.initializeData();
 
         List<Category> categories = kudaGoService.fetchAll(wiremock.getBaseUrl() + tailCategoryUrl, Category[].class);
 
@@ -95,4 +113,4 @@ class DataInitializerTests {
         assertEquals("Антикафе", categories.get(0).getName());
         assertEquals("airports", categories.get(1).getSlug());
     }
-}*/
+}
