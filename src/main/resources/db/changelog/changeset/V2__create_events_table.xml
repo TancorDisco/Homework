@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="V2__create_events_table" author="sweetbun">
+        <sql>
+            CREATE TABLE events (
+            id SERIAL PRIMARY KEY,
+            title VARCHAR(255) NOT NULL,
+            price VARCHAR(255),
+            favorites_count INT,
+            date DATE NOT NULL,
+            place_id BIGINT NOT NULL,
+            CONSTRAINT fk_event_place FOREIGN KEY (place_id)
+            REFERENCES places (id)
+            );
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

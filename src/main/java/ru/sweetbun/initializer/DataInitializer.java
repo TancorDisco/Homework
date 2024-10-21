@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import ru.sweetbun.entity.Category;
 import ru.sweetbun.entity.Location;
 import ru.sweetbun.log.LogExecutionTime;
+import ru.sweetbun.repository.LocationRepository;
 import ru.sweetbun.service.KudaGoService;
 import ru.sweetbun.storage.Storage;
 
@@ -21,14 +22,18 @@ import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 @Slf4j
 public class DataInitializer implements ApplicationContextAware {
 
-    private final KudaGoService kudaGoService;
+    private final KudaGoService<Category> categoryKudaGoService;
+    private final KudaGoService<Location> locationKudaGoService;
     private final Storage<Category> categoryStorage;
-    private final Storage<Location> locationStorage;
+    //private final Storage<Location> locationStorage;
+    private final LocationRepository locationRepository;
     private final static String URL_CATEGORY = "https://kudago.com/public-api/v1.4/place-categories";
     private final static String URL_LOCATION = "https://kudago.com/public-api/v1.4/locations";
 
@@ -40,12 +45,14 @@ public class DataInitializer implements ApplicationContextAware {
     private ApplicationContext applicationContext;
 
     @Autowired
-    public DataInitializer(KudaGoService kudaGoService, Storage<Category> categoryStorage, Storage<Location> locationStorage,
+    public DataInitializer(KudaGoService<Category> categoryKudaGoService, KudaGoService<Location> locationKudaGoService,
+                           Storage<Category> categoryStorage, LocationRepository locationRepository,
                            ThreadPoolTaskExecutor taskExecutor, ScheduledExecutorService taskScheduler,
                            @Value("${app.initialization.schedule-delay}") Duration scheduleDelay) {
-        this.kudaGoService = kudaGoService;
+        this.categoryKudaGoService = categoryKudaGoService;
+        this.locationKudaGoService = locationKudaGoService;
         this.categoryStorage = categoryStorage;
-        this.locationStorage = locationStorage;
+        this.locationRepository = locationRepository;
         this.scheduleDelay = scheduleDelay;
         this.taskExecutor = taskExecutor;
         this.taskScheduler = taskScheduler;
@@ -71,15 +78,19 @@ public class DataInitializer implements ApplicationContextAware {
 
         Future<?> categoryTask = taskExecutor.submit(() -> {
             log.info("Fetching and storing categories...");
-            List<Category> categories = kudaGoService.fetchAll(URL_CATEGORY, Category[].class);
+            List<Category> categories = categoryKudaGoService.fetchAll(URL_CATEGORY, Category[].class);
             categories.forEach(categoryStorage::create);
             log.info("Categories stored: {}", categories.size());
         });
 
         Future<?> locationTask = taskExecutor.submit(() -> {
             log.info("Fetching and storing locations...");
-            List<Location> locations = kudaGoService.fetchAll(URL_LOCATION, Location[].class);
-            locations.forEach(locationStorage::create);
+            List<Location> locations = locationKudaGoService.fetchAll(URL_LOCATION, Location[].class);
+            AtomicLong i = new AtomicLong(1L);
+            locations.forEach(location -> {
+                location.setId(i.getAndIncrement());
+                locationRepository.save(location);
+            });
             log.info("Locations stored: {}", locations.size());
         });
 

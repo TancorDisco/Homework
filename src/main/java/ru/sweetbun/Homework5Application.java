@@ -1,6 +1,8 @@
 package ru.sweetbun;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.CacheManager;
@@ -37,20 +39,11 @@ public class Homework5Application {
 	}
 
 	@Bean
-	public Storage<Category> categoryStorage() {
-		return new Storage<>();
-	}
-
-	@Bean
-	public Storage<Location> locationStorage() {
-		return new Storage<>();
-	}
-
-	@Bean KudaGoService<Category> categoryService() {
-		return new KudaGoService<>(restTemplate(), categoryStorage());
-	}
-
-	@Bean KudaGoService<Location> locationService() {
-		return new KudaGoService<>(restTemplate(), locationStorage());
+	public ModelMapper modelMapper() {
+		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration()
+				.setSkipNullEnabled(true)
+				.setMatchingStrategy(MatchingStrategies.STRICT);
+		return modelMapper;
 	}
 }

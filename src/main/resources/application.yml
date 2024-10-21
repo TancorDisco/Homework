@@ -1,19 +1,37 @@
 currency:
   api-url: "http://www.cbr.ru/scripts/XML_daily.asp"
+
 spring:
   cache:
     type: simple
   application:
     name: currency-service
+  liquibase:
+    enabled: false
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  datasource:
+    url: jdbc:postgresql://localhost:5432/homework_10
+    username: postgres
+    password: 4096
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+        ddl-auto: update
+    show-sql: true
+
 springdoc:
   api-docs:
     enabled: true
   swagger-ui:
     enabled: true
+
 app:
   pool:
     size:
       thread: 3
       scheduler: 2
   initialization:
-    schedule-delay: PT1M
+    schedule-delay: PT3M

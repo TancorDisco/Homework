@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.client.RestTemplate;
 import ru.sweetbun.DTO.EventsResponse;
 import ru.sweetbun.entity.Event;
 import ru.sweetbun.exception.CurrencyNotFoundException;
+import ru.sweetbun.repository.EventRepository;
 
 import java.util.List;
 
@@ -23,6 +25,12 @@ class EventServiceTests {
 
     @Mock
     private CurrencyService currencyService;
+
+    @Mock
+    private EventRepository eventRepository;
+
+    @Mock
+    private ModelMapper modelMapper;
 
     @InjectMocks
     private EventService eventService;

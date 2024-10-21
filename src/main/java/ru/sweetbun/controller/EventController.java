@@ -1,11 +1,12 @@
 package ru.sweetbun.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import ru.sweetbun.DTO.EventDTO;
 import ru.sweetbun.entity.Event;
+import ru.sweetbun.exception.ResourceNotFoundException;
 import ru.sweetbun.service.EventService;
 import ru.sweetbun.service.ReactorEventService;
 import reactor.core.publisher.Mono;
@@ -28,8 +29,8 @@ public class EventController {
         this.reactorEventService = reactorEventService;
     }
 
-    @GetMapping
-    public CompletableFuture<List<Event>> getEvents(
+    @GetMapping("/available")
+    public CompletableFuture<List<Event>> getAvailableEvents(
             @RequestParam Double budget,
             @RequestParam String currency,
             @RequestParam(required = false) LocalDate dateFrom,
@@ -37,12 +38,44 @@ public class EventController {
         return eventService.getAvailableEvents(budget, currency, dateFrom, dateTo);
     }
 
-    @GetMapping("reactor")
+    @GetMapping("reactor/available")
     public Mono<List<Event>> getEventsReactor(
             @RequestParam Double budget,
             @RequestParam String currency,
             @RequestParam(required = false) LocalDate dateFrom,
             @RequestParam(required = false) LocalDate dateTo) {
         return reactorEventService.getAvailableEvents(budget, currency, dateFrom, dateTo);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createEvent(@RequestBody EventDTO eventDTO) {
+        eventService.createEvent(eventDTO);
+        return ResponseEntity.ok("Event is saved");
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllEvents() {
+        return ResponseEntity.ok(eventService.getAllEvents());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getEventById(@PathVariable Long id) {
+        return ResponseEntity.ok(eventService.getEventById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody EventDTO eventDTO) {
+        return ResponseEntity.ok(eventService.updateEvent(eventDTO, id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
+        eventService.deleteEventById(id);
+        return ResponseEntity.ok("Event is deleted");
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException e) {;
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

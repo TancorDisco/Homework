@@ -8,6 +8,7 @@ import lombok.Data;
 public class PlaceDTO {
 
     private String title;
+    private String slug;
     private String address;
     private String location;
 }
