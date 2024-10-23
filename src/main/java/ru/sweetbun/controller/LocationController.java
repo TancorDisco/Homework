@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.sweetbun.DTO.LocationDTO;
 import ru.sweetbun.entity.Location;
+import ru.sweetbun.exception.RelatedEntityNotFoundException;
 import ru.sweetbun.exception.ResourceNotFoundException;
 import ru.sweetbun.log.LogExecutionTime;
 import ru.sweetbun.service.KudaGoService;
@@ -48,10 +49,5 @@ public class LocationController {
     public ResponseEntity<?> deleteLocation(@PathVariable Long id) {
         locationService.deleteLocationById(id);
         return ResponseEntity.ok("Location is deleted");
-    }
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException e) {;
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

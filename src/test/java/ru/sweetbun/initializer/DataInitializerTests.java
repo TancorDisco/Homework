@@ -17,6 +17,7 @@ import ru.sweetbun.entity.Category;
 import ru.sweetbun.entity.Location;
 import ru.sweetbun.repository.LocationRepository;
 import ru.sweetbun.service.KudaGoService;
+import ru.sweetbun.service.LocationService;
 import ru.sweetbun.storage.Storage;
 
 import java.time.Duration;
@@ -45,9 +46,6 @@ class DataInitializerTests{
     @Autowired
     private Storage<Category> categoryStorage;
 
-    /*@Autowired
-    private Storage<Location> locationStorage;*/
-
     @Autowired
     private LocationRepository locationRepository;
 
@@ -73,8 +71,8 @@ class DataInitializerTests{
         int port = wiremock.getMappedPort(8080);
         WireMock.configureFor(host, port);
 
-        dataInitializer = new DataInitializer(categoryKudaGoService, locationKudaGoService, categoryStorage, locationRepository,
-                taskExecutor, taskScheduler, Duration.ofMinutes(1));
+        dataInitializer = new DataInitializer(categoryKudaGoService, locationKudaGoService, categoryStorage,
+                locationRepository, taskExecutor, taskScheduler, Duration.ofMinutes(1));
     }
 
     @AfterEach

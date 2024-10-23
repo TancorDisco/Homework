@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface PlaceRepository extends JpaRepository<Place, Long> {
 
-    @Query("SELECT p FROM Place p LEFT JOIN FETCH p.events WHERE p.id = :id")
+    @Query("SELECT p FROM Place p JOIN FETCH p.events WHERE p.id = :id")
     Optional<Place> findPlaceById();
 
     Place findPlaceBySlug(String slug);

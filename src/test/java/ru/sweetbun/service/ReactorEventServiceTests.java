@@ -8,16 +8,15 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestTemplate;
 import ru.sweetbun.DTO.EventsResponse;
 import ru.sweetbun.entity.Event;
-import ru.sweetbun.exception.CurrencyNotFoundException;
-import ru.sweetbun.exception.CurrencyServiceUnavailableException;
+import ru.sweetbun.exception.ResourceNotFoundException;
+import ru.sweetbun.repository.EventRepository;
 
 import java.util.List;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 class ReactorEventServiceTests {
 
@@ -26,6 +25,9 @@ class ReactorEventServiceTests {
 
     @Mock
     private CurrencyService currencyService;
+
+    @Mock
+    private EventRepository eventRepository;
 
     @InjectMocks
     private ReactorEventService reactorEventService;
@@ -43,8 +45,8 @@ class ReactorEventServiceTests {
         Event event1 = Event.builder().price("500").build();
         Event event2 = Event.builder().price("700").build();
 
-        when(restTemplate.getForObject(anyString(), eq(EventsResponse.class)))
-                .thenReturn(new EventsResponse(List.of(event1, event2)));
+        when(eventRepository.findAll())
+                .thenReturn((List.of(event1, event2)));
         when(currencyService.convertCurrencyToRUB(anyString(), anyDouble())).thenReturn(100_000.0);
 
         //Act
@@ -53,7 +55,6 @@ class ReactorEventServiceTests {
         //Assert
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(restTemplate, times(1)).getForObject(anyString(), eq(EventsResponse.class));
         verify(currencyService, never()).convertCurrencyToRUB(anyString(), anyDouble());
     }
 
@@ -66,8 +67,8 @@ class ReactorEventServiceTests {
         String currency = "USD";
 
         when(currencyService.convertCurrencyToRUB(eq("USD"), eq(budget))).thenReturn(1000.0);
-        when(restTemplate.getForObject(anyString(), eq(EventsResponse.class)))
-                .thenReturn(new EventsResponse(List.of(event1, event2)));
+        when(eventRepository.findAll())
+                .thenReturn((List.of(event1, event2)));
 
         // Act
         List<Event> result = reactorEventService.getAvailableEvents(budget, currency, null, null).block();
@@ -81,22 +82,15 @@ class ReactorEventServiceTests {
 
     @Test
     public void getAvailableEvents_FetchEventsFails_ReturnsEmptyList() {
-        // Assert
         // Arrange
         Double budget = 1000.0;
         String currency = "RUB";
 
-        // Симуляция ошибки API
-        when(restTemplate.getForObject(anyString(), eq(EventsResponse.class)))
-                .thenThrow(new RuntimeException("API error"));
-
-        // Act
-        List<Event> result = reactorEventService.getAvailableEvents(budget, currency, null, null).block();
+        when(eventRepository.findAll())
+                .thenThrow(new ResourceNotFoundException("No such events."));
 
         // Assert
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-        verify(restTemplate, times(1)).getForObject(anyString(), eq(EventsResponse.class));
+        assertThrows(ResourceNotFoundException.class, () -> reactorEventService.getAvailableEvents(budget, currency, null, null).block());
     }
 
     @Test

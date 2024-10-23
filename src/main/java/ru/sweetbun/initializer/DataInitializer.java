@@ -15,6 +15,7 @@ import ru.sweetbun.entity.Location;
 import ru.sweetbun.log.LogExecutionTime;
 import ru.sweetbun.repository.LocationRepository;
 import ru.sweetbun.service.KudaGoService;
+import ru.sweetbun.service.LocationService;
 import ru.sweetbun.storage.Storage;
 
 import java.time.Duration;
@@ -23,7 +24,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 @Slf4j
@@ -32,7 +32,6 @@ public class DataInitializer implements ApplicationContextAware {
     private final KudaGoService<Category> categoryKudaGoService;
     private final KudaGoService<Location> locationKudaGoService;
     private final Storage<Category> categoryStorage;
-    //private final Storage<Location> locationStorage;
     private final LocationRepository locationRepository;
     private final static String URL_CATEGORY = "https://kudago.com/public-api/v1.4/place-categories";
     private final static String URL_LOCATION = "https://kudago.com/public-api/v1.4/locations";
@@ -88,8 +87,11 @@ public class DataInitializer implements ApplicationContextAware {
             List<Location> locations = locationKudaGoService.fetchAll(URL_LOCATION, Location[].class);
             AtomicLong i = new AtomicLong(1L);
             locations.forEach(location -> {
-                location.setId(i.getAndIncrement());
-                locationRepository.save(location);
+                Location oldLocation = locationRepository.findLocationBySlug(location.getSlug());
+                if (oldLocation == null) {
+                    location.setId(i.getAndIncrement());
+                    locationRepository.save(location);
+                }
             });
             log.info("Locations stored: {}", locations.size());
         });

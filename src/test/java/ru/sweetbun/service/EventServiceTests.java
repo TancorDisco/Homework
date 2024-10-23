@@ -6,12 +6,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.client.RestTemplate;
-import ru.sweetbun.DTO.EventsResponse;
 import ru.sweetbun.entity.Event;
 import ru.sweetbun.exception.CurrencyNotFoundException;
 import ru.sweetbun.repository.EventRepository;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,8 +49,8 @@ class EventServiceTests {
         Event event1 = Event.builder().price("500").build();
         Event event2 = Event.builder().price("700").build();
 
-        when(restTemplate.getForObject(anyString(), eq(EventsResponse.class)))
-                .thenReturn(new EventsResponse(List.of(event1, event2)));
+        when(eventRepository.findAll((Specification<Event>) any()))
+                .thenReturn(List.of(event1, event2));
         when(currencyService.convertCurrencyToRUB(anyString(), anyDouble())).thenReturn(100_000.0);
 
         //Act
@@ -58,7 +59,6 @@ class EventServiceTests {
         //Assert
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(restTemplate, times(1)).getForObject(anyString(), eq(EventsResponse.class));
         verify(currencyService, never()).convertCurrencyToRUB(anyString(), anyDouble());
     }
 
@@ -71,8 +71,8 @@ class EventServiceTests {
         String currency = "USD";
 
         when(currencyService.convertCurrencyToRUB(eq("USD"), eq(budget))).thenReturn(1000.0);
-        when(restTemplate.getForObject(anyString(), eq(EventsResponse.class)))
-                .thenReturn(new EventsResponse(List.of(event1, event2)));
+        when(eventRepository.findAll((Specification<Event>) any()))
+                .thenReturn((List.of(event1, event2)));
 
         // Act
         List<Event> result = eventService.getAvailableEvents(budget, currency, null, null).join();
@@ -89,17 +89,15 @@ class EventServiceTests {
         // Assert
         Double budget = 1000.0;
         String currency = "RUB";
+        when(eventRepository.findAll((Specification<Event>) any()))
+                .thenReturn(Collections.emptyList());
 
-        when(restTemplate.getForObject(anyString(), eq(EventsResponse.class)))
-                .thenThrow(new RuntimeException("API error"));
-
-        // Act
+        //Act
         List<Event> result = eventService.getAvailableEvents(budget, currency, null, null).join();
 
         // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
-        verify(restTemplate, times(1)).getForObject(anyString(), eq(EventsResponse.class));
     }
 
     @Test

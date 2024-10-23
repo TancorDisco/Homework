@@ -24,8 +24,13 @@ public class LocationService {
     }
 
     public Location createLocation(LocationDTO locationDTO) {
-        Location location = modelMapper.map(locationDTO, Location.class);
-        return locationRepository.save(location);
+        Location location = locationRepository.findLocationBySlug(locationDTO.getSlug());
+
+        if (location == null) {
+            location = modelMapper.map(locationDTO, Location.class);
+            return locationRepository.save(location);
+        }
+        return location;
     }
 
     public Location getLocationById(Long id) {
@@ -44,6 +49,11 @@ public class LocationService {
     }
 
     public void deleteLocationById(Long id) {
+        getLocationById(id);
         locationRepository.deleteById(id);
+    }
+
+    public Location getLocationBySlug(String slug) {
+        return locationRepository.findLocationBySlug(slug);
     }
 }
