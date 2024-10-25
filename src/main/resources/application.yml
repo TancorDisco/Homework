@@ -35,3 +35,8 @@ app:
       scheduler: 2
   initialization:
     schedule-delay: PT1M
+
+command:
+  api-url:
+    categories: "https://kudago.com/public-api/v1.4/place-categories"
+    locations: "https://kudago.com/public-api/v1.4/locations"
