@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import ru.sweetbun.entity.Identifiable;
 import ru.sweetbun.storage.Storage;
+import ru.sweetbun.storage.StorageObserver;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -24,6 +25,9 @@ class KudaGoServiceTests {
     @Mock
     private RestTemplate restTemplate;
 
+    @Mock
+    private StorageObserver<Identifiable> observer;
+
     @InjectMocks
     KudaGoService<Identifiable> kudaGoService;
 
@@ -33,6 +37,7 @@ class KudaGoServiceTests {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         entity = mock(Identifiable.class);
+        kudaGoService.addObserver(observer);
     }
 
     @Test
@@ -46,6 +51,7 @@ class KudaGoServiceTests {
         assertFalse(res.isEmpty());
         assertEquals(1, res.size());
         verify(restTemplate, times(1)).getForObject(URL, Identifiable[].class);
+        verify(observer, times(1)).onEntityCreated(entity);
     }
 
     @Test
@@ -57,6 +63,7 @@ class KudaGoServiceTests {
 
         assertNull(res);
         verify(restTemplate, times(1)).getForObject(URL, Identifiable[].class);
+        verify(observer, never()).onEntityCreated(any());
     }
 
     @Test
@@ -102,24 +109,25 @@ class KudaGoServiceTests {
 
     @Test
     void create_ValidEntity_EntityCreated() {
-        doNothing().when(storage).create(entity);
+        doNothing().when(observer).onEntityCreated(entity);
 
         ResponseEntity<Identifiable> res = kudaGoService.create(entity);
 
         assertTrue(res.getStatusCode().is2xxSuccessful());
+        verify(observer, times(1)).onEntityCreated(entity);
     }
 
     @Test
     void update_IdExists_EntityUpdated() {
         Long id = 1L;
         when(storage.findById(id)).thenReturn(Optional.ofNullable(entity));
-        doNothing().when(storage).update(id, entity);
+        doNothing().when(observer).onEntityUpdated(id, entity);
 
         var res = kudaGoService.update(id, entity);
 
         assertTrue(res.getStatusCode().is2xxSuccessful());
         verify(entity, times(1)).setId(id);
-        verify(storage, times(1)).update(id, entity);
+        verify(observer, times(1)).onEntityUpdated(id, entity);
     }
 
     @Test
@@ -130,18 +138,19 @@ class KudaGoServiceTests {
         var res = kudaGoService.update(id, entity);
 
         assertTrue(res.getStatusCode().is4xxClientError());
-        verify(storage, never()).update(anyLong(), any());
+        verify(observer, never()).onEntityUpdated(anyLong(), any());
     }
 
     @Test
     void delete_IdExists_EntityDeleted() {
         Long id = 1L;
         when(storage.findById(id)).thenReturn(Optional.ofNullable(entity));
-        doNothing().when(storage).delete(id);
+        doNothing().when(observer).onEntityDeleted(id);
 
         var res = kudaGoService.delete(id);
 
         assertTrue(res.getStatusCode().is2xxSuccessful());
+        verify(observer, times(1)).onEntityDeleted(id);
     }
 
     @Test
@@ -152,5 +161,6 @@ class KudaGoServiceTests {
         var res = kudaGoService.delete(id);
 
         assertTrue(res.getStatusCode().is4xxClientError());
+        verify(observer, never()).onEntityDeleted(anyLong());
     }
 }
