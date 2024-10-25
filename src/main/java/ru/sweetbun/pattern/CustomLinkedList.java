@@ -1,4 +1,4 @@
-package ru.sweetbun.storage;
+package ru.sweetbun.pattern;
 
 import lombok.AllArgsConstructor;
 

@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import ru.sweetbun.entity.Identifiable;
 import ru.sweetbun.storage.Storage;
-import ru.sweetbun.storage.StorageObserver;
+import ru.sweetbun.pattern.StorageObserver;
 
 import java.util.Collections;
 import java.util.Optional;

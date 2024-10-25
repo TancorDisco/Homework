@@ -1,7 +1,8 @@
-package ru.sweetbun.storage;
+package ru.sweetbun.pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.sweetbun.storage.Storage;
 
 @Component
 public class StorageSaverObserver<T> implements StorageObserver<T> {

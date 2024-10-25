@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.sweetbun.pattern.Memento;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,4 +34,16 @@ public class Location implements Identifiable {
     @JsonManagedReference
     @OneToMany(mappedBy = "location", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Place> places = new ArrayList<>();
+
+    public Memento<Location> saveToMemento() {
+        return new Memento<>(new Location(this.id, this.slug, this.name, this.places));
+    }
+
+    public void restoreFromMemento(Memento<Location> memento) {
+        Location savedState = memento.getState();
+        this.id = savedState.getId();
+        this.slug = savedState.getSlug();
+        this.name = savedState.getName();
+        this.places = savedState.getPlaces();
+    }
 }

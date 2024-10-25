@@ -1,10 +1,10 @@
 package ru.sweetbun.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
+import ru.sweetbun.pattern.Memento;
 
 import java.time.LocalDate;
 import java.util.regex.Matcher;
@@ -50,4 +50,18 @@ public class Event implements Identifiable{
         }
         return 0.0;
     }
-}
+
+    @Override
+    public Memento<Event> saveToMemento() {
+        return new Memento<>(new Event(this.id, this.title, this.price, this.favoritesCount, this.date, this.place));
+    }
+
+    public void restoreFromMemento(Memento<Event> memento) {
+        Event savedState = memento.getState();
+        this.id = savedState.getId();
+        this.title = savedState.getTitle();
+        this.price = savedState.getPrice();
+        this.favoritesCount = savedState.getFavoritesCount();
+        this.date = savedState.getDate();
+        this.place = savedState.getPlace();
+    }}

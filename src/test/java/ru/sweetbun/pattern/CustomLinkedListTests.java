@@ -1,7 +1,8 @@
-package ru.sweetbun.storage;
+package ru.sweetbun.pattern;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.sweetbun.pattern.CustomLinkedList;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ru.sweetbun.storage;
+package ru.sweetbun.pattern;
 
 public interface StorageObserver<T> {
     void onEntityCreated(T entity);
