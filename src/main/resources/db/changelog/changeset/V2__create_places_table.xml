@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="V2__create_places_table" author="sweetbun">
+        <sql>
+            CREATE TABLE places (
+            id BIGSERIAL PRIMARY KEY,
+            title VARCHAR(255),
+            slug VARCHAR(255),
+            address VARCHAR(255),
+            location_id BIGINT NOT NULL,
+            CONSTRAINT fk_location
+            FOREIGN KEY (location_id)
+            REFERENCES locations(id)
+            ON DELETE CASCADE
+            );
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

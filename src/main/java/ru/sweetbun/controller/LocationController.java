@@ -1,10 +1,16 @@
 package ru.sweetbun.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.sweetbun.log.LogExecutionTime;
+import ru.sweetbun.DTO.LocationDTO;
 import ru.sweetbun.entity.Location;
-import ru.sweetbun.storage.Storage;
+import ru.sweetbun.exception.RelatedEntityNotFoundException;
+import ru.sweetbun.exception.ResourceNotFoundException;
+import ru.sweetbun.log.LogExecutionTime;
+import ru.sweetbun.service.KudaGoService;
+import ru.sweetbun.service.LocationService;
 
 import java.util.Collection;
 
@@ -12,48 +18,36 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/api/v1.4/locations")
 public class LocationController {
-    private final Storage<Location> locationStorage;
+    private final LocationService locationService;
 
-    public LocationController(Storage<Location> locationStorage) {
-        this.locationStorage = locationStorage;
+    @Autowired
+    public LocationController(LocationService locationService) {
+        this.locationService = locationService;
     }
 
     @GetMapping
-    public Collection<Location> getAllLocations() {
-        return locationStorage.findAll().values();
+    public ResponseEntity<?> getAllLocations() {
+        return ResponseEntity.ok(locationService.getAllLocations());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Location> getLocationById(@PathVariable Long id) {
-        return locationStorage.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(locationService.getLocationById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Location> createLocation(@RequestBody Location location) {
-        locationStorage.create(location);
-        return ResponseEntity.ok(location);
+    public ResponseEntity<Location> createLocation(@RequestBody LocationDTO locationDTO) {
+        return ResponseEntity.ok(locationService.createLocation(locationDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Location> updateLocation(@PathVariable Long id, @RequestBody Location location) {
-        if (locationStorage.findById(id).isPresent()) {
-            location.setId(id);
-            locationStorage.update(id, location);
-            return ResponseEntity.ok(location);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Location> updateLocation(@PathVariable Long id, @RequestBody LocationDTO locationDTO) {
+        return ResponseEntity.ok(locationService.updateLocation(locationDTO, id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Location> deleteLocation(@PathVariable Long id) {
-        if (locationStorage.findById(id).isPresent()) {
-            locationStorage.delete(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<?> deleteLocation(@PathVariable Long id) {
+        locationService.deleteLocationById(id);
+        return ResponseEntity.ok("Location is deleted");
     }
 }
