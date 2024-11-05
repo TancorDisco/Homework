@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.sweetbun.service.TokenBlacklistService;
 import ru.sweetbun.service.TokenService;
 
 import java.io.IOException;
@@ -20,9 +21,12 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
 
+    private final TokenBlacklistService tokenBlacklistService;
+
     @Autowired
-    public AuthorizationFilter(TokenService tokenService) {
+    public AuthorizationFilter(TokenService tokenService, TokenBlacklistService tokenBlacklistService) {
         this.tokenService = tokenService;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Override
@@ -35,7 +39,6 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-
         if (header == null || header.isBlank()) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
@@ -46,8 +49,12 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         }
 
         String token = header.substring(7);
-        String username = tokenService.getUsernameFromToken(token);
+        if (tokenBlacklistService.isTokenBlacklisted(token)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
 
+        String username = tokenService.getUsernameFromToken(token);
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     username, null, null

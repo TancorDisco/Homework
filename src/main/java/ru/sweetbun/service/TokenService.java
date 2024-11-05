@@ -52,4 +52,10 @@ public class TokenService {
         DecodedJWT decodedJWT = getVerifier().verify(token);
         return decodedJWT.getSubject();
     }
+
+    public long getExpirationTimeInMinutes(String token) {
+        DecodedJWT decodedJWT = getVerifier().verify(token);
+        Date exporationDate = decodedJWT.getExpiresAt();
+        return (exporationDate.getTime() - new Date().getTime()) / 60_000;
+    }
 }

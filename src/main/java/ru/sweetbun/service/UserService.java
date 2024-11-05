@@ -3,10 +3,11 @@ package ru.sweetbun.service;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.testcontainers.shaded.org.bouncycastle.crypto.generators.BCrypt;
 import ru.sweetbun.DTO.UserDTO;
 import ru.sweetbun.entity.Role;
 import ru.sweetbun.entity.User;
@@ -29,13 +30,16 @@ public class UserService {
 
     private final TokenService tokenService;
 
+    private final TokenBlacklistService tokenBlacklistService;
+
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper, RoleService roleService, TokenService tokenService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper, RoleService roleService, TokenService tokenService, TokenBlacklistService tokenBlacklistService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
         this.roleService = roleService;
         this.tokenService = tokenService;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     public String register(UserDTO userDTO) {
@@ -62,10 +66,9 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
 
-    public Object login(UserDTO userDTO, boolean rememberMe) {
+    public String login(UserDTO userDTO, boolean rememberMe) {
         authenticate(userDTO);
-        String token = tokenService.generateToken(userDTO.getUsername(), rememberMe);
-        return "Bearer " + token;
+        return "Bearer " + tokenService.generateToken(userDTO.getUsername(), rememberMe);
     }
 
     private void authenticate(UserDTO userDTO) {
@@ -74,5 +77,14 @@ public class UserService {
         if (!passwordEncoder.matches(rawPasswordWithSalt, user.getPassword())) {
             throw new UsernameNotFoundException("Invalid username or password");
         }
+    }
+
+    public ResponseEntity<?> logout(String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            long expInMinutes = tokenService.getExpirationTimeInMinutes(token);
+            tokenBlacklistService.addTokenToBlacklist(token, expInMinutes);
+            return ResponseEntity.ok("Logged out successfully");
+        } else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid authorization header");
     }
 }
