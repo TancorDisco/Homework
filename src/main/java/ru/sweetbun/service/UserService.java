@@ -87,4 +87,9 @@ public class UserService {
             return ResponseEntity.ok("Logged out successfully");
         } else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid authorization header");
     }
+
+    public void updatePassword(User user, String password) {
+        user.setPassword(password);
+        userRepository.save(user);
+    }
 }
