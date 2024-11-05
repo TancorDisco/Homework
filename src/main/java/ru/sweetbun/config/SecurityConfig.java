@@ -12,18 +12,23 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final UserDetailsService userDetails;
+
     private final PasswordEncoder passwordEncoder;
 
+    private final AuthorizationFilter authorizationFilter;
+
     @Autowired
-    public SecurityConfig(UserDetailsService userDetails, PasswordEncoder passwordEncoder) {
+    public SecurityConfig(UserDetailsService userDetails, PasswordEncoder passwordEncoder, AuthorizationFilter authorizationFilter) {
         this.userDetails = userDetails;
         this.passwordEncoder = passwordEncoder;
+        this.authorizationFilter = authorizationFilter;
     }
 
     @Bean
@@ -31,17 +36,10 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/auth/register").permitAll()
+                        .requestMatchers("/auth/register", "/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin(login -> login
-                        .loginProcessingUrl("/auth/login")
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/auth/logout")
-                        .permitAll()
-                );
+                .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

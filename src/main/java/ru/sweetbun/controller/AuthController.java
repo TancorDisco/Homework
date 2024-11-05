@@ -2,10 +2,7 @@ package ru.sweetbun.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.sweetbun.DTO.UserDTO;
 import ru.sweetbun.service.UserService;
 
@@ -23,5 +20,15 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
         return ResponseEntity.ok("User registered successfully with username: " + userService.register(userDTO));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody UserDTO userDTO, @RequestParam(required = false) boolean rememberMe) {
+        return ResponseEntity.ok(userService.login(userDTO, rememberMe));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logoutUser() {
+        return ResponseEntity.ok("Logout successful");
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.testcontainers.shaded.org.bouncycastle.crypto.generators.BCrypt;
 import ru.sweetbun.DTO.UserDTO;
 import ru.sweetbun.entity.Role;
 import ru.sweetbun.entity.User;
@@ -26,12 +27,15 @@ public class UserService {
 
     private final RoleService roleService;
 
+    private final TokenService tokenService;
+
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper, RoleService roleService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper, RoleService roleService, TokenService tokenService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
         this.roleService = roleService;
+        this.tokenService = tokenService;
     }
 
     public String register(UserDTO userDTO) {
@@ -56,5 +60,19 @@ public class UserService {
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+    }
+
+    public Object login(UserDTO userDTO, boolean rememberMe) {
+        authenticate(userDTO);
+        String token = tokenService.generateToken(userDTO.getUsername(), rememberMe);
+        return "Bearer " + token;
+    }
+
+    private void authenticate(UserDTO userDTO) {
+        User user = getUserByUsername(userDTO.getUsername());
+        String rawPasswordWithSalt = userDTO.getPassword() + user.getSalt();
+        if (!passwordEncoder.matches(rawPasswordWithSalt, user.getPassword())) {
+            throw new UsernameNotFoundException("Invalid username or password");
+        }
     }
 }
