@@ -4,9 +4,11 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -15,7 +17,9 @@ import ru.sweetbun.service.TokenBlacklistService;
 import ru.sweetbun.service.TokenService;
 
 import java.io.IOException;
+import java.util.List;
 
+@Slf4j
 @Component
 public class AuthorizationFilter extends OncePerRequestFilter {
 
@@ -39,8 +43,12 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String requestPath = request.getRequestURI();
+
+        log.info("Processing request to {}", requestPath);
 
         if (header == null || header.isBlank()) {
+            log.warn("Authorization header is missing or blank.");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
@@ -51,17 +59,21 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
         String token = header.substring(7);
         if (tokenBlacklistService.isTokenBlacklisted(token)) {
+            log.warn("Token is blacklisted.");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
         String username = tokenService.getUsernameFromToken(token);
+        List<GrantedAuthority> authorities = tokenService.getAuthoritiesFromToken(token);
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    username, null, null
+                    username, null, authorities
             );
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("Token for user: {} with roles: {}", username, authorities);
         }
 
         filterChain.doFilter(request, response);

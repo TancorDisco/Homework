@@ -3,6 +3,7 @@ package ru.sweetbun.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.sweetbun.DTO.LocationDTO;
 import ru.sweetbun.entity.Location;
@@ -35,16 +36,19 @@ public class LocationController {
         return ResponseEntity.ok(locationService.getLocationById(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Location> createLocation(@RequestBody LocationDTO locationDTO) {
         return ResponseEntity.ok(locationService.createLocation(locationDTO));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Location> updateLocation(@PathVariable Long id, @RequestBody LocationDTO locationDTO) {
         return ResponseEntity.ok(locationService.updateLocation(locationDTO, id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteLocation(@PathVariable Long id) {
         locationService.deleteLocationById(id);

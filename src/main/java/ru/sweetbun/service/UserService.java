@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import ru.sweetbun.repository.UserRepository;
 
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -67,16 +70,32 @@ public class UserService {
     }
 
     public String login(UserDTO userDTO, boolean rememberMe) {
-        authenticate(userDTO);
-        return "Bearer " + tokenService.generateToken(userDTO.getUsername(), rememberMe);
+        log.info("Attempting login for user: {}", userDTO.getUsername());
+
+        List<SimpleGrantedAuthority> roles = authenticate(userDTO);
+
+        if (roles.isEmpty()) {
+            log.warn("No roles found for user: {}", userDTO.getUsername());
+        }
+
+        List<String> roleNames = roles.stream()
+                .map(SimpleGrantedAuthority::getAuthority)
+                .toList();
+        return "Bearer " + tokenService.generateToken(userDTO.getUsername(), roleNames, rememberMe);
     }
 
-    private void authenticate(UserDTO userDTO) {
+    private List<SimpleGrantedAuthority> authenticate(UserDTO userDTO) {
+        log.info("Authenticating user: {}", userDTO.getUsername());
+
         User user = getUserByUsername(userDTO.getUsername());
         String rawPasswordWithSalt = userDTO.getPassword() + user.getSalt();
         if (!passwordEncoder.matches(rawPasswordWithSalt, user.getPassword())) {
+            log.error("Invalid username or password for user: {}", userDTO.getUsername());
             throw new UsernameNotFoundException("Invalid username or password");
         }
+        return user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 
     public ResponseEntity<?> logout(String authHeader) {

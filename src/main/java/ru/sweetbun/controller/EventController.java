@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.sweetbun.DTO.EventDTO;
 import ru.sweetbun.entity.Event;
@@ -51,6 +52,7 @@ public class EventController {
         return reactorEventService.getAvailableEvents(budget, currency, dateFrom, dateTo);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<?> createEvent(@RequestBody EventDTO eventDTO) {
         return ResponseEntity.ok(eventService.createEvent(eventDTO));
@@ -61,11 +63,13 @@ public class EventController {
         return ResponseEntity.ok(eventService.getEventById(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody EventDTO eventDTO) {
         return ResponseEntity.ok(eventService.updateEvent(eventDTO, id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
         eventService.deleteEventById(id);

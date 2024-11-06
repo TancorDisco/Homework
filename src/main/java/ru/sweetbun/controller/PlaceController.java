@@ -2,6 +2,7 @@ package ru.sweetbun.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.sweetbun.DTO.PlaceDTO;
 import ru.sweetbun.entity.Place;
@@ -28,16 +29,19 @@ public class PlaceController {
         return ResponseEntity.ok(placeService.getPlaceById(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Place> createPlace(@RequestBody PlaceDTO placeDTO) {
         return ResponseEntity.ok(placeService.createPlace(placeDTO));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Place> updatePlace(@PathVariable Long id, @RequestBody PlaceDTO placeDTO) {
         return ResponseEntity.ok(placeService.updatePlace(placeDTO, id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePlace(@PathVariable Long id) {
         placeService.deletePlaceById(id);
