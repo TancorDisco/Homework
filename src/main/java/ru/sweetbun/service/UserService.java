@@ -46,6 +46,8 @@ public class UserService {
     }
 
     public String register(UserDTO userDTO) {
+        if (userRepository.findByUsername(userDTO.getUsername()).isPresent())
+            throw new IllegalArgumentException("User already exists");
         User user = modelMapper.map(userDTO, User.class);
         String salt = generateSalt();
         user.setSalt(salt);
