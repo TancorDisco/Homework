@@ -3,9 +3,11 @@ package ru.sweetbun.service;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,7 +38,8 @@ public class UserService {
     private final TokenBlacklistService tokenBlacklistService;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper, RoleService roleService, TokenService tokenService, TokenBlacklistService tokenBlacklistService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper,
+                       RoleService roleService, TokenService tokenService, TokenBlacklistService tokenBlacklistService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
@@ -112,5 +115,14 @@ public class UserService {
     public void updatePassword(User user, String password) {
         user.setPassword(password);
         userRepository.save(user);
+    }
+
+    public String becomeAdmin() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = getUserByUsername(username);
+        Role role = roleService.getRoleByName("ADMIN");
+        user.getRoles().add(role);
+        userRepository.save(user);
+        return username + " become an ADMIN!\n For the changes to take effect, log out and log in again";
     }
 }

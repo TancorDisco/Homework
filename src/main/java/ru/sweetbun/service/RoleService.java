@@ -2,9 +2,12 @@ package ru.sweetbun.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.sweetbun.DTO.RoleDTO;
 import ru.sweetbun.entity.Role;
+import ru.sweetbun.entity.User;
 import ru.sweetbun.exception.ResourceNotFoundException;
 import ru.sweetbun.repository.RoleRepository;
 
@@ -15,7 +18,7 @@ public class RoleService {
 
     private final RoleRepository roleRepository;
 
-    protected final ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public RoleService(RoleRepository roleRepository, ModelMapper modelMapper) {

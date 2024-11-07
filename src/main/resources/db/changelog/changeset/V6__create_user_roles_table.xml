@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="V6__create_user_roles_table" author="sweetbun">
+        <sql>
+            CREATE TABLE user_roles (
+            user_id BIGINT NOT NULL,
+            role_id BIGINT NOT NULL,
+            CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+            CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES roles(role_id) ON DELETE CASCADE,
+            PRIMARY KEY (user_id, role_id)
+            );
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
