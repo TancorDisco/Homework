@@ -86,8 +86,8 @@ jobs:
 
       - name: Tag Docker Image for GitHub Packages
         run: |
-          docker tag homework:latest ghcr.io/tancordisco/homework/homework:latest
+          docker tag homework:latest ghcr.io/${{ github.actor }}/homework:latest
 
       - name: Push Docker Image to GitHub Packages
         run: |
-          docker push ghcr.io/tancordisco/homework/homework:latest
+          docker push ghcr.io/${{ github.actor }}/homework:latest
