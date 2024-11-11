@@ -1,6 +1,7 @@
 name: CI Pipeline
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -31,10 +32,6 @@ jobs:
         image: wiremock/wiremock:latest
         ports:
           - 8080:8080
-        options: >-
-          --entrypoint wiremock
-          --verbose
-          --port 8080
 
     steps:
       - name: Checkout repository
