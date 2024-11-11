@@ -43,13 +43,9 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Build and Test
+      - name: Build, Test, and Generate Coverage Report
         run: |
-          mvn clean verify
-
-      - name: Run Tests and Generate Coverage Report
-        run: |
-          mvn test jacoco:report
+          mvn clean verify jacoco:report
         env:
           POSTGRES_USER: test
           POSTGRES_PASSWORD: test
