@@ -6,15 +6,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.sweetbun.DTO.ConvertRequest;
 import ru.sweetbun.DTO.ConvertResponse;
 import ru.sweetbun.DTO.CurrencyRateResponse;
 import ru.sweetbun.DTO.ErrorResponse;
-import ru.sweetbun.exception.CurrencyNotFoundException;
-import ru.sweetbun.exception.CurrencyServiceUnavailableException;
 import ru.sweetbun.service.CurrencyService;
 
 @RestController
@@ -46,6 +44,7 @@ public class CurrencyController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Convert currency from one to another")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully converted currency",

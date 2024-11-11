@@ -1,4 +1,4 @@
-package ru.sweetbun.BecomeAnyone.service;
+package ru.sweetbun.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.sweetbun.entity.User;
-import ru.sweetbun.service.UserService;
 
 import java.util.Set;
 import java.util.stream.Collectors;
