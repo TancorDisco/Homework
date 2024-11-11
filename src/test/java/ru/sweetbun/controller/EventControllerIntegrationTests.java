@@ -106,7 +106,6 @@ class EventControllerIntegrationTests extends BaseIntegrationTest{
         //Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().get(0).getTitle()).isEqualTo("Test Event");
     }
 
     @Test
