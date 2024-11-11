@@ -45,11 +45,11 @@ jobs:
 
       - name: Build and Test
         run: |
-          ./mvnw clean verify
+          mvn clean verify
 
       - name: Run Tests and Generate Coverage Report
         run: |
-          ./mvnw test jacoco:report
+          mvn test jacoco:report
         env:
           POSTGRES_USER: test
           POSTGRES_PASSWORD: test
@@ -71,7 +71,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          ./mvnw sonar:sonar -Dsonar.projectKey=TancorDisco_Homework -Dsonar.host.url=https://sonarcloud.io
+          mvn sonar:sonar -Dsonar.projectKey=TancorDisco_Homework -Dsonar.host.url=https://sonarcloud.io
 
       - name: Build Docker Image
         run: |
