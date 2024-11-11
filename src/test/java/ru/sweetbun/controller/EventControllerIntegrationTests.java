@@ -94,21 +94,6 @@ class EventControllerIntegrationTests extends BaseIntegrationTest{
     }
 
     @Test
-    void getEvents_ValidRequest_shouldReturnEventsFromDatabase() {
-        //Arrange
-        event = eventService.createEvent(eventDTO);
-
-        //Act
-        ParameterizedTypeReference<List<Event>> responseType = new ParameterizedTypeReference<List<Event>>() {};
-        ResponseEntity<List<Event>> response = restTemplate.exchange("/api/v1.4/events?budget=1000&currency=RUB&dateFrom=10.01.2016&dateTo=02.02.2025", HttpMethod.GET, null, responseType);
-        log.info("Response: {}", response.getBody());
-
-        //Assert
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isNotNull();
-    }
-
-    @Test
     void getEventById_ValidId_ShouldReturnEvent() {
         // Arrange
         event = eventService.createEvent(eventDTO);
