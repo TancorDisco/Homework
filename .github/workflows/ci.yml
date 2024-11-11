@@ -84,7 +84,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Tag Docker Image for GitHub Packages
+        run: |
+          docker tag homework:latest ghcr.io/${{ github.repository }}/homework:latest
+
       - name: Push Docker Image to GitHub Packages
         run: |
-          docker homework:latest ghcr.io/${{ github.repository }}/homework:latest
           docker push ghcr.io/${{ github.repository }}/homework:latest
