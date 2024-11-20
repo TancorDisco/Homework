@@ -59,7 +59,7 @@ public class ThreeToThreeRabbit {
                 message = "Hello, RabbitMQ!";
                 break;
             case "largeMessage":
-                message = "A".repeat(1024 * 10);
+                message = "A".repeat(1024);
                 break;
         }
 

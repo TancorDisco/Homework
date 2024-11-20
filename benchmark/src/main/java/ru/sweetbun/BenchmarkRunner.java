@@ -4,10 +4,7 @@ import org.openjdk.jmh.results.format.ResultFormatType;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import ru.sweetbun.benchmark.rabbit.OneToOneRabbit;
-import ru.sweetbun.benchmark.rabbit.OneToThreeRabbit;
-import ru.sweetbun.benchmark.rabbit.ThreeToOneRabbit;
-import ru.sweetbun.benchmark.rabbit.ThreeToThreeRabbit;
+import ru.sweetbun.benchmark.rabbit.*;
 
 public class BenchmarkRunner {
 
@@ -18,6 +15,7 @@ public class BenchmarkRunner {
                 .include(ThreeToOneRabbit.class.getSimpleName())
                 .include(OneToThreeRabbit.class.getSimpleName())
                 .include(ThreeToThreeRabbit.class.getSimpleName())
+                .include(TenToTenRabbit.class.getSimpleName())
                 .forks(1)
                 .resultFormat(ResultFormatType.TEXT)
                 .build();
