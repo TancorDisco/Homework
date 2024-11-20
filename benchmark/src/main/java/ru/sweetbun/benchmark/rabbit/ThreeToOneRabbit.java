@@ -29,6 +29,9 @@ public class ThreeToOneRabbit {
     @Autowired
     private Queue queue;
 
+    private final int producers = 3;
+    private final int consumers = 1;
+
     private SimpleMessageListenerContainer listenerContainer;
 
     private long totalTimeDelivery = 0;
@@ -80,10 +83,10 @@ public class ThreeToOneRabbit {
                 ? org.springframework.amqp.core.AcknowledgeMode.MANUAL
                 : org.springframework.amqp.core.AcknowledgeMode.AUTO);
 
-        listenerContainer.setConcurrentConsumers(1);
+        listenerContainer.setConcurrentConsumers(consumers);
         listenerContainer.start();
 
-        producerExecutor = Executors.newFixedThreadPool(3);
+        producerExecutor = Executors.newFixedThreadPool(producers);
     }
 
     @TearDown(Level.Trial)
@@ -121,7 +124,7 @@ public class ThreeToOneRabbit {
     @BenchmarkMode(Mode.Throughput)
     @OutputTimeUnit(TimeUnit.SECONDS)
     public void sendAndConsumeMessages() throws InterruptedException {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < producers; i++) {
             producerExecutor.submit(() -> {
                 long startDelivery = System.nanoTime();
                 rabbitTemplate.convertAndSend(queue.getName(), message);

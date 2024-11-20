@@ -22,15 +22,15 @@ import java.util.concurrent.*;
 @Warmup(iterations = 1, time = 1)
 @Measurement(iterations = 2, time = 1)
 @Fork(1)
-public class ThreeToThreeRabbit {
+public class TenToTenRabbit {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
     private Queue queue;
 
-    private int producers = 3;
-    private int consumers = 3;
+    private int producers = 10;
+    private int consumers = 10;
 
     private SimpleMessageListenerContainer listenerContainer;
 
@@ -111,8 +111,8 @@ public class ThreeToThreeRabbit {
 
             try (FileWriter writer = new FileWriter("Rabbit.txt", true)) {
                 writer.write("Mode: " + mode + "\n");
-                writer.write("[3 to 3 Rabbit] Avg Time Delivery (ns): " + avgTimeDelivery + "\n");
-                writer.write("[3 to 3 Rabbit] Avg Time Processing (ns): " + avgTimeProcessing + "\n");
+                writer.write("[10 to 10 Rabbit] Avg Time Delivery (ns): " + avgTimeDelivery + "\n");
+                writer.write("[10 to 10 Rabbit] Avg Time Processing (ns): " + avgTimeProcessing + "\n");
                 writer.write("-------------------------------------------------------------------------------\n");
             } catch (Exception e) {
                 e.printStackTrace();
