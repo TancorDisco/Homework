@@ -13,7 +13,7 @@ import ru.sweetbun.config.RabbitConfig;
 
 import java.io.FileWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @SpringBootTest
 @BenchmarkMode(Mode.AverageTime)
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 1, time = 1)
 @Measurement(iterations = 2, time = 1)
 @Fork(1)
-public class OneToOneRabbit {
+public class ThreeToThreeRabbit {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
@@ -41,6 +41,7 @@ public class OneToOneRabbit {
     private String message;
 
     private AnnotationConfigApplicationContext context;
+    private ExecutorService producerExecutor;
 
     @Setup(Level.Trial)
     public void setup() throws Exception {
@@ -58,6 +59,7 @@ public class OneToOneRabbit {
                 message = "A".repeat(1024 * 10);
                 break;
         }
+
         listenerContainer.setMessageListener((ChannelAwareMessageListener) (message, channel) -> {
             long startProcessing = System.nanoTime();
             try {
@@ -73,14 +75,25 @@ public class OneToOneRabbit {
                 channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);
             }
         });
+
         listenerContainer.setAcknowledgeMode("manualAck".equals(mode)
                 ? org.springframework.amqp.core.AcknowledgeMode.MANUAL
                 : org.springframework.amqp.core.AcknowledgeMode.AUTO);
+
+        listenerContainer.setConcurrentConsumers(3);
         listenerContainer.start();
+
+        producerExecutor = Executors.newFixedThreadPool(3);
     }
 
     @TearDown(Level.Trial)
     public void tearDown() throws Exception {
+        if (producerExecutor != null) {
+            producerExecutor.shutdown();
+            if (!producerExecutor.awaitTermination(1, TimeUnit.SECONDS)) {
+                producerExecutor.shutdownNow();
+            }
+        }
         if (context != null) {
             context.close();
         }
@@ -95,8 +108,8 @@ public class OneToOneRabbit {
 
             try (FileWriter writer = new FileWriter("Rabbit.txt", true)) {
                 writer.write("Mode: " + mode + "\n");
-                writer.write("[1 to 1 Rabbit] Avg Time Delivery (ns): " + avgTimeDelivery + "\n");
-                writer.write("[1 to 1 Rabbit] Avg Time Processing (ns): " + avgTimeProcessing + "\n");
+                writer.write("[3 to 3 Rabbit] Avg Time Delivery (ns): " + avgTimeDelivery + "\n");
+                writer.write("[3 to 3 Rabbit] Avg Time Processing (ns): " + avgTimeProcessing + "\n");
                 writer.write("-------------------------------------------------------------------------------\n");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -107,10 +120,14 @@ public class OneToOneRabbit {
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @OutputTimeUnit(TimeUnit.SECONDS)
-    public void sendAndConsumeMessages() {
-        long startDelivery = System.nanoTime();
-        rabbitTemplate.convertAndSend(queue.getName(), message);
-        long timeDelivery = System.nanoTime() - startDelivery;
-        totalTimeDelivery += timeDelivery;
+    public void sendAndConsumeMessages() throws InterruptedException {
+        for (int i = 0; i < 3; i++) {
+            producerExecutor.submit(() -> {
+                long startDelivery = System.nanoTime();
+                rabbitTemplate.convertAndSend(queue.getName(), message);
+                long timeDelivery = System.nanoTime() - startDelivery;
+                totalTimeDelivery += timeDelivery;
+            });
+        }
     }
 }
