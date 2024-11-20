@@ -5,6 +5,7 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import ru.sweetbun.benchmark.rabbit.OneToOneRabbit;
+import ru.sweetbun.benchmark.rabbit.ThreeToOneRabbit;
 import ru.sweetbun.benchmark.rabbit.ThreeToThreeRabbit;
 
 public class BenchmarkRunner {
@@ -13,6 +14,7 @@ public class BenchmarkRunner {
 
         Options options = new OptionsBuilder()
                 .include(OneToOneRabbit.class.getSimpleName())
+                .include(ThreeToOneRabbit.class.getSimpleName())
                 .include(ThreeToThreeRabbit.class.getSimpleName())
                 .forks(1)
                 .resultFormat(ResultFormatType.TEXT)
