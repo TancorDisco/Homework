@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
-@BenchmarkMode(Mode.AverageTime)
+@BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
 @State(Scope.Thread)
 @Warmup(iterations = 1, time = 1)
@@ -105,8 +105,6 @@ public class OneToOneRabbit {
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.Throughput)
-    @OutputTimeUnit(TimeUnit.SECONDS)
     public void sendAndConsumeMessages() {
         long startDelivery = System.nanoTime();
         rabbitTemplate.convertAndSend(queue.getName(), message);
