@@ -1,14 +1,21 @@
-/*
 package ru.sweetbun.benchmark.rabbit;
 
-import com.rabbitmq.client.*;
 import org.openjdk.jmh.annotations.*;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.api.ChannelAwareMessageListener;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import ru.sweetbun.config.RabbitConfig;
 
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
+@SpringBootTest
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.SECONDS)
 @State(Scope.Thread)
@@ -16,13 +23,13 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 2, time = 1)
 @Fork(1)
 public class OneToOneRabbit {
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
-    private static final String QUEUE_NAME = "testQueue";
-    private static final String HOST = "localhost";
+    @Autowired
+    private Queue queue;
 
-    private ConnectionFactory factory;
-    private Connection connection;
-    private Channel channel;
+    private SimpleMessageListenerContainer listenerContainer;
 
     private long totalTimeDelivery = 0;
     private long totalTimeProcessing = 0;
@@ -33,13 +40,14 @@ public class OneToOneRabbit {
 
     private String message;
 
+    private AnnotationConfigApplicationContext context;
+
     @Setup(Level.Trial)
     public void setup() throws Exception {
-        factory = new ConnectionFactory();
-        factory.setHost(HOST);
-        connection = factory.newConnection();
-        channel = connection.createChannel();
-        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+        context = new AnnotationConfigApplicationContext(RabbitConfig.class);
+        rabbitTemplate = context.getBean(RabbitTemplate.class);
+        queue = context.getBean(Queue.class);
+        listenerContainer = context.getBean(SimpleMessageListenerContainer.class);
 
         switch (mode) {
             case "standard":
@@ -47,15 +55,39 @@ public class OneToOneRabbit {
                 message = "Hello, RabbitMQ!";
                 break;
             case "largeMessage":
-                message = "A".repeat(1024 * 512); // 1/2 MB сообщение
+                message = "A".repeat(1024 * 50);
                 break;
         }
+        listenerContainer.setMessageListener((ChannelAwareMessageListener) (message, channel) -> {
+            long startProcessing = System.nanoTime();
+            try {
+                String receivedMessage = new String(message.getBody(), StandardCharsets.UTF_8);
+                long timeProcessing = System.nanoTime() - startProcessing;
+                totalTimeProcessing += timeProcessing;
+                messageCount++;
+
+                if ("manualAck".equals(mode)) {
+                    channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+                }
+            } catch (Exception e) {
+                channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);
+            }
+        });
+        listenerContainer.setAcknowledgeMode("manualAck".equals(mode)
+                ? org.springframework.amqp.core.AcknowledgeMode.MANUAL
+                : org.springframework.amqp.core.AcknowledgeMode.AUTO);
+        listenerContainer.start();
     }
 
     @TearDown(Level.Trial)
     public void tearDown() throws Exception {
-        channel.close();
-        connection.close();
+        if (context != null) {
+            context.close();
+        }
+        if (rabbitTemplate.getConnectionFactory() instanceof CachingConnectionFactory) {
+            ((CachingConnectionFactory) rabbitTemplate.getConnectionFactory()).destroy();
+        }
+        listenerContainer.stop();
 
         if (messageCount > 0) {
             long avgTimeDelivery = totalTimeDelivery / messageCount;
@@ -65,55 +97,19 @@ public class OneToOneRabbit {
                 writer.write("Mode: " + mode + "\n");
                 writer.write("[1 to 1 Rabbit] Avg Time Delivery (ns): " + avgTimeDelivery + "\n");
                 writer.write("[1 to 1 Rabbit] Avg Time Processing (ns): " + avgTimeProcessing + "\n");
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    @Benchmark // Пропускная способность с учетом режима
+    @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @OutputTimeUnit(TimeUnit.SECONDS)
-    public void sendAndConsumeMessages() throws Exception {
+    public void sendAndConsumeMessages() {
         long startDelivery = System.nanoTime();
-        channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
-
-        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            long timeDelivery = System.nanoTime() - startDelivery;
-            totalTimeDelivery += timeDelivery;
-
-            long startProcessing = System.nanoTime();
-            try {
-                String receivedMessage = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                long timeProcessing = System.nanoTime() - startProcessing;
-                totalTimeProcessing += timeProcessing;
-                messageCount++;
-
-                if ("manualAck".equals(mode)) {
-                    channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-                }
-            } catch (Exception e) {
-                channel.basicNack(delivery.getEnvelope().getDeliveryTag(), false, true);
-            }
-        };
-        boolean autoAck = !"manualAck".equals(mode);
-        channel.basicConsume(QUEUE_NAME, autoAck, deliverCallback, consumerTag -> {});
+        rabbitTemplate.convertAndSend(queue.getName(), message);
+        long timeDelivery = System.nanoTime() - startDelivery;
+        totalTimeDelivery += timeDelivery;
     }
-
-    @Benchmark // Latency продюсера
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void sendMessages() throws IOException {
-        channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
-    }
-
-    @Benchmark // Latency консюмера
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.SECONDS)
-    public void consumeMessages() throws Exception {
-        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            String receivedMessage = new String(delivery.getBody(), StandardCharsets.UTF_8);
-        };
-        channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {});
-    }
-}*/
+}

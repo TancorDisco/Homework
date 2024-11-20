@@ -13,12 +13,10 @@ public class BenchmarkRunner {
     public static final Logger log = LoggerFactory.getLogger(BenchmarkRunner.class);
 
     public static void main(String[] args) throws Exception {
-
         log.info("Начало тестирования");
+
         Options options = new OptionsBuilder()
-                //.include(KafkaBenchmark.class.getSimpleName()) // Тесты для Kafka
-                //.include(ThreeToOneRabbit.class.getSimpleName())
-                .include(OneToOneRabbit.class.getSimpleName()) // Тесты для RabbitMQ
+                .include(OneToOneRabbit.class.getSimpleName()) // Указываем имя вашего теста
                 .forks(1)
                 .resultFormat(ResultFormatType.TEXT)
                 .build();
