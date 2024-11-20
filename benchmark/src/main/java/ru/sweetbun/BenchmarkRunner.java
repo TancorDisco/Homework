@@ -17,6 +17,7 @@ public class BenchmarkRunner {
         log.info("Начало тестирования");
         Options options = new OptionsBuilder()
                 //.include(KafkaBenchmark.class.getSimpleName()) // Тесты для Kafka
+                //.include(ThreeToOneRabbit.class.getSimpleName())
                 .include(OneToOneRabbit.class.getSimpleName()) // Тесты для RabbitMQ
                 .forks(1)
                 .resultFormat(ResultFormatType.TEXT)

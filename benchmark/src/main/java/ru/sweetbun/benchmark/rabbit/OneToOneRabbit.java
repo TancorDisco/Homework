@@ -1,3 +1,4 @@
+/*
 package ru.sweetbun.benchmark.rabbit;
 
 import com.rabbitmq.client.*;
@@ -17,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class OneToOneRabbit {
 
     private static final String QUEUE_NAME = "testQueue";
-    private static final String HOST = "localhost";  // Адрес вашего RabbitMQ сервера
+    private static final String HOST = "localhost";
 
     private ConnectionFactory factory;
     private Connection connection;
@@ -27,6 +28,11 @@ public class OneToOneRabbit {
     private long totalTimeProcessing = 0;
     private int messageCount = 0;
 
+    @Param({"standard", "manualAck", "largeMessage"})
+    private String mode;
+
+    private String message;
+
     @Setup(Level.Trial)
     public void setup() throws Exception {
         factory = new ConnectionFactory();
@@ -34,6 +40,16 @@ public class OneToOneRabbit {
         connection = factory.newConnection();
         channel = connection.createChannel();
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+
+        switch (mode) {
+            case "standard":
+            case "manualAck":
+                message = "Hello, RabbitMQ!";
+                break;
+            case "largeMessage":
+                message = "A".repeat(1024 * 512); // 1/2 MB сообщение
+                break;
+        }
     }
 
     @TearDown(Level.Trial)
@@ -45,21 +61,21 @@ public class OneToOneRabbit {
             long avgTimeDelivery = totalTimeDelivery / messageCount;
             long avgTimeProcessing = totalTimeProcessing / messageCount;
 
-            try (FileWriter writer = new FileWriter("benchmark_results.txt")) {
-                writer.write("Средняя задержка доставки (ns): " + avgTimeDelivery + "\n");
-                writer.write("Среднее время обработки (ns): " + avgTimeProcessing + "\n");
+            try (FileWriter writer = new FileWriter("Rabbit.txt", true)) {
+                writer.write("Mode: " + mode + "\n");
+                writer.write("[1 to 1 Rabbit] Avg Time Delivery (ns): " + avgTimeDelivery + "\n");
+                writer.write("[1 to 1 Rabbit] Avg Time Processing (ns): " + avgTimeProcessing + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    @Benchmark //Пропускную способность
+    @Benchmark // Пропускная способность с учетом режима
     @BenchmarkMode(Mode.Throughput)
     @OutputTimeUnit(TimeUnit.SECONDS)
     public void sendAndConsumeMessages() throws Exception {
         long startDelivery = System.nanoTime();
-        String message = "Hello, RabbitMQ!";
         channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
 
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
@@ -73,29 +89,31 @@ public class OneToOneRabbit {
                 totalTimeProcessing += timeProcessing;
                 messageCount++;
 
-                channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+                if ("manualAck".equals(mode)) {
+                    channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+                }
             } catch (Exception e) {
                 channel.basicNack(delivery.getEnvelope().getDeliveryTag(), false, true);
             }
         };
-        channel.basicConsume(QUEUE_NAME, false, deliverCallback, consumerTag -> {});
+        boolean autoAck = !"manualAck".equals(mode);
+        channel.basicConsume(QUEUE_NAME, autoAck, deliverCallback, consumerTag -> {});
     }
 
-    @Benchmark //Latency producer
+    @Benchmark // Latency продюсера
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void sendMessages() throws IOException {
-        String message = "Hello, RabbitMQ!";
         channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
     }
 
-    @Benchmark //Latency consumer
+    @Benchmark // Latency консюмера
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.SECONDS)
     public void consumeMessages() throws Exception {
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
+            String receivedMessage = new String(delivery.getBody(), StandardCharsets.UTF_8);
         };
         channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {});
     }
-}
+}*/

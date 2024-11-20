@@ -1,0 +1,9 @@
+Mode: standard
+[1 to 1 Rabbit] Avg Time Delivery (ns): 643892696
+[1 to 1 Rabbit] Avg Time Processing (ns): 4660
+Mode: manualAck
+[1 to 1 Rabbit] Avg Time Delivery (ns): 994871033
+[1 to 1 Rabbit] Avg Time Processing (ns): 5574
+Mode: largeMessage
+[1 to 1 Rabbit] Avg Time Delivery (ns): 1043828460
+[1 to 1 Rabbit] Avg Time Processing (ns): 433456
