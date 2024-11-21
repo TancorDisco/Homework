@@ -9,12 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
-import org.springframework.kafka.core.*;
-import org.springframework.kafka.listener.ContainerProperties;
-import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 @Configuration
@@ -33,11 +28,6 @@ public class KafkaConfig {
         return producerProps;
     }
 
-    /*@Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
-    }*/
-
     @Qualifier("consumerProperties")
     @Bean
     public Properties consumerProperties() {
@@ -50,12 +40,6 @@ public class KafkaConfig {
         consumerProps.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         return consumerProps;
     }
-
-    /*@Bean
-    public KafkaMessageListenerContainer<String, String> listenerContainer() {
-        ContainerProperties containerProps = new ContainerProperties(TOPIC_NAME);
-        return new KafkaMessageListenerContainer<>(consumerFactory(), containerProps);
-    }*/
 
     @Bean
     public NewTopic topic() {

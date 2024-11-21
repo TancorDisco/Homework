@@ -14,7 +14,9 @@ import ru.sweetbun.config.KafkaConfig;
 
 import java.io.FileWriter;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -22,16 +24,22 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
 @State(Scope.Thread)
-@Warmup(iterations = 1, time = 1)
-@Measurement(iterations = 2, time = 3)
-@Fork(1)
-public class OneToOneKafka {
+@Warmup(iterations = 2, time = 3)
+@Measurement(iterations = 3, time = 5)
+@Fork(3)
+public class BenchmarkKafka {
 
-    private static final Logger log = LoggerFactory.getLogger(OneToOneKafka.class);
+    private static final Logger log = LoggerFactory.getLogger(BenchmarkKafka.class);
 
-    private KafkaProducer<String, String> producer;
-    private KafkaConsumer<String, String> consumer;
     private final String TOPIC = "testTopic";
+
+    @Param({"1", "3", "10"})
+    private int PRODUCER_COUNT;
+    @Param({"1", "3", "10"})
+    private int CONSUMER_COUNT;
+
+    private List<KafkaProducer<String, String>> producers = new ArrayList<>();
+    private List<KafkaConsumer<String, String>> consumers = new ArrayList<>();
 
     private long totalTimeDelivery = 0;
     private long totalTimeProcessing = 0;
@@ -47,19 +55,24 @@ public class OneToOneKafka {
     @Setup(Level.Trial)
     public void setup() throws InterruptedException {
         context = new AnnotationConfigApplicationContext(KafkaConfig.class);
+
         Properties producerProperties = context.getBean("producerProperties", Properties.class);
         if ("replication".equals(mode)) {
             producerProperties.put("acks", "all");
         } else {
             producerProperties.put("acks", "1");
         }
-        producer = new KafkaProducer<>(producerProperties);
+        for (int i = 0; i < PRODUCER_COUNT; i++) {
+            producers.add(new KafkaProducer<>(producerProperties));
+        }
 
         Properties consumerProperties = context.getBean("consumerProperties", Properties.class);
-        consumer = new KafkaConsumer<>(consumerProperties);
-        consumer.subscribe(Collections.singletonList(TOPIC));
-        //log.info("Consumer subscribed to topic: {}", TOPIC);
-        Thread.sleep(2000);
+        for (int i = 0; i < CONSUMER_COUNT; i++) {
+            KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProperties);
+            consumer.subscribe(Collections.singletonList(TOPIC));
+            consumers.add(consumer);
+        }
+
         switch (mode) {
             case "standard":
             case "replication":
@@ -69,13 +82,22 @@ public class OneToOneKafka {
                 message = "A".repeat(1024);
                 break;
         }
+
+        Thread.sleep(1000);
     }
 
     @TearDown(Level.Trial)
     public void tearDown() throws Exception {
-        if (context != null) context.close();
-        if (producer != null) producer.close();
-        if (consumer != null) consumer.close();
+        for (KafkaProducer<String, String> producer : producers) {
+            producer.close();
+        }
+        for (KafkaConsumer<String, String> consumer : consumers) {
+            consumer.close();
+        }
+
+        if (context != null) {
+            context.close();
+        }
 
         if (messageCount > 0) {
             long avgTimeDelivery = totalTimeDelivery / messageCount;
@@ -83,8 +105,8 @@ public class OneToOneKafka {
 
             try (FileWriter writer = new FileWriter("Kafka.txt", true)) {
                 writer.write("Mode: " + mode + "\n");
-                writer.write("[1 to 1 Kafka] Avg Time Delivery (ns): " + avgTimeDelivery + "\n");
-                writer.write("[1 to 1 Kafka] Avg Time Processing (ns): " + avgTimeProcessing + "\n");
+                writer.write("[" + PRODUCER_COUNT +" to "+ CONSUMER_COUNT +" Kafka] Avg Time Delivery (ns): " + avgTimeDelivery + "\n");
+                writer.write("[" + PRODUCER_COUNT +" to "+ CONSUMER_COUNT +" Kafka] Avg Time Processing (ns): " + avgTimeProcessing + "\n");
                 writer.write("-------------------------------------------------------------------------------\n");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -95,36 +117,33 @@ public class OneToOneKafka {
     @Benchmark
     public void sendAndConsumeMessages() {
         long startDelivery = System.nanoTime();
-        producer.send(new ProducerRecord<>(TOPIC, "key", message), (metadata, exception) -> {
-            if (exception != null) {
-                log.error("Error sending message", exception);
-            } else {
-                log.info("Message sent to topic {}, partition {}, offset {}",
-                        metadata.topic(), metadata.partition(), metadata.offset());
-            }
+
+        producers.forEach(producer -> {
+            producer.send(new ProducerRecord<>(TOPIC, "key", message), (metadata, exception) -> {
+                if (exception != null) {
+                    log.error("Error sending message", exception);
+                }
+            });
         });
+
         long timeDelivery = System.nanoTime() - startDelivery;
         totalTimeDelivery += timeDelivery;
 
-        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
         long startProcessing = System.nanoTime();
-        if (records.isEmpty()) {
-            log.warn("No messages received during poll");
-        } else {
+        consumers.forEach(consumer -> {
+            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
             records.forEach(record -> {
                 log.info("Received message: key={}, value={}, partition={}, offset={}",
                         record.key(), record.value(), record.partition(), record.offset());
             });
-        }
+            messageCount += records.count();
+            try {
+                consumer.commitSync();
+            } catch (CommitFailedException e) {
+                log.error("Failed to commit offsets", e);
+            }
+        });
         long timeProcessing = System.nanoTime() - startProcessing;
         totalTimeProcessing += timeProcessing;
-        messageCount += records.count();
-        log.info("Total messages processed so far: {}", messageCount);
-
-        try {
-            consumer.commitSync();
-        } catch (CommitFailedException e) {
-            log.error("Failed to commit offsets", e);
-        }
     }
 }

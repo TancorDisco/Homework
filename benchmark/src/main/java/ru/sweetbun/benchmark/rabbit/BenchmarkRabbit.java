@@ -16,21 +16,23 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.*;
 
 @SpringBootTest
-@BenchmarkMode(Mode.AverageTime)
+@BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
 @State(Scope.Thread)
-@Warmup(iterations = 1, time = 1)
-@Measurement(iterations = 2, time = 1)
-@Fork(1)
-public class ThreeToThreeRabbit {
+@Warmup(iterations = 2, time = 3)
+@Measurement(iterations = 3, time = 5)
+@Fork(3)
+public class BenchmarkRabbit {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
     private Queue queue;
 
-    private int producers = 3;
-    private int consumers = 3;
+    @Param({"1", "3", "10"})
+    private int PRODUCER_COUNT;
+    @Param({"1", "3", "10"})
+    private int CONSUMER_COUNT;
 
     private SimpleMessageListenerContainer listenerContainer;
 
@@ -83,10 +85,10 @@ public class ThreeToThreeRabbit {
                 ? org.springframework.amqp.core.AcknowledgeMode.MANUAL
                 : org.springframework.amqp.core.AcknowledgeMode.AUTO);
 
-        listenerContainer.setConcurrentConsumers(consumers);
+        listenerContainer.setConcurrentConsumers(CONSUMER_COUNT);
         listenerContainer.start();
 
-        producerExecutor = Executors.newFixedThreadPool(producers);
+        producerExecutor = Executors.newFixedThreadPool(PRODUCER_COUNT);
     }
 
     @TearDown(Level.Trial)
@@ -111,8 +113,8 @@ public class ThreeToThreeRabbit {
 
             try (FileWriter writer = new FileWriter("Rabbit.txt", true)) {
                 writer.write("Mode: " + mode + "\n");
-                writer.write("[3 to 3 Rabbit] Avg Time Delivery (ns): " + avgTimeDelivery + "\n");
-                writer.write("[3 to 3 Rabbit] Avg Time Processing (ns): " + avgTimeProcessing + "\n");
+                writer.write("[" + PRODUCER_COUNT +" to "+ CONSUMER_COUNT +" Rabbit] Avg Time Delivery (ns): " + avgTimeDelivery + "\n");
+                writer.write("[" + PRODUCER_COUNT +" to "+ CONSUMER_COUNT +" Rabbit] Avg Time Processing (ns): " + avgTimeProcessing + "\n");
                 writer.write("-------------------------------------------------------------------------------\n");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -121,10 +123,8 @@ public class ThreeToThreeRabbit {
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.Throughput)
-    @OutputTimeUnit(TimeUnit.SECONDS)
     public void sendAndConsumeMessages() throws InterruptedException {
-        for (int i = 0; i < producers; i++) {
+        for (int i = 0; i < PRODUCER_COUNT; i++) {
             producerExecutor.submit(() -> {
                 long startDelivery = System.nanoTime();
                 rabbitTemplate.convertAndSend(queue.getName(), message);
