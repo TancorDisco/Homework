@@ -14,7 +14,6 @@ public class BenchmarkRunner {
         Options options = new OptionsBuilder()
                 .include(BenchmarkRabbit.class.getSimpleName())
                 .include(BenchmarkKafka.class.getSimpleName())
-                .forks(1)
                 .resultFormat(ResultFormatType.TEXT)
                 .build();
 

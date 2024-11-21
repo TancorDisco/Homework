@@ -1,0 +1,324 @@
+Mode: standard
+[1 to 1 Rabbit] Avg Time Delivery (ns): 1819036
+[1 to 1 Rabbit] Avg Time Processing (ns): 497978
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 1 Rabbit] Avg Time Delivery (ns): 2561003
+[1 to 1 Rabbit] Avg Time Processing (ns): 21570
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 1 Rabbit] Avg Time Delivery (ns): 3695929
+[1 to 1 Rabbit] Avg Time Processing (ns): 1210
+-------------------------------------------------------------------------------
+Mode: manualAck
+[1 to 1 Rabbit] Avg Time Delivery (ns): 2089018
+[1 to 1 Rabbit] Avg Time Processing (ns): 20619
+-------------------------------------------------------------------------------
+Mode: manualAck
+[1 to 1 Rabbit] Avg Time Delivery (ns): 3024077
+[1 to 1 Rabbit] Avg Time Processing (ns): 430537
+-------------------------------------------------------------------------------
+Mode: manualAck
+[1 to 1 Rabbit] Avg Time Delivery (ns): 2138079
+[1 to 1 Rabbit] Avg Time Processing (ns): 1571
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 1 Rabbit] Avg Time Delivery (ns): 2216073
+[1 to 1 Rabbit] Avg Time Processing (ns): 426407
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 1 Rabbit] Avg Time Delivery (ns): 2127903
+[1 to 1 Rabbit] Avg Time Processing (ns): 301826
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 1 Rabbit] Avg Time Delivery (ns): 2193376
+[1 to 1 Rabbit] Avg Time Processing (ns): 249599
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 1 Rabbit] Avg Time Delivery (ns): 5257294
+[3 to 1 Rabbit] Avg Time Processing (ns): 32004
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 1 Rabbit] Avg Time Delivery (ns): 4701760
+[3 to 1 Rabbit] Avg Time Processing (ns): 1077
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 1 Rabbit] Avg Time Delivery (ns): 6273213
+[3 to 1 Rabbit] Avg Time Processing (ns): 23790
+-------------------------------------------------------------------------------
+Mode: manualAck
+[3 to 1 Rabbit] Avg Time Delivery (ns): 3870949
+[3 to 1 Rabbit] Avg Time Processing (ns): 1087
+-------------------------------------------------------------------------------
+Mode: manualAck
+[3 to 1 Rabbit] Avg Time Delivery (ns): 4936476
+[3 to 1 Rabbit] Avg Time Processing (ns): 238619
+-------------------------------------------------------------------------------
+Mode: manualAck
+[3 to 1 Rabbit] Avg Time Delivery (ns): 3743924
+[3 to 1 Rabbit] Avg Time Processing (ns): 20264
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 1 Rabbit] Avg Time Delivery (ns): 5459794
+[3 to 1 Rabbit] Avg Time Processing (ns): 54061
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 1 Rabbit] Avg Time Delivery (ns): 5706148
+[3 to 1 Rabbit] Avg Time Processing (ns): 28768
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 1 Rabbit] Avg Time Delivery (ns): 4560798
+[3 to 1 Rabbit] Avg Time Processing (ns): 210213
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 1 Rabbit] Avg Time Delivery (ns): 14332072
+[10 to 1 Rabbit] Avg Time Processing (ns): 985
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 1 Rabbit] Avg Time Delivery (ns): 19330024
+[10 to 1 Rabbit] Avg Time Processing (ns): 1256
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 1 Rabbit] Avg Time Delivery (ns): 15413204
+[10 to 1 Rabbit] Avg Time Processing (ns): 1132
+-------------------------------------------------------------------------------
+Mode: manualAck
+[10 to 1 Rabbit] Avg Time Delivery (ns): 17506158
+[10 to 1 Rabbit] Avg Time Processing (ns): 1147
+-------------------------------------------------------------------------------
+Mode: manualAck
+[10 to 1 Rabbit] Avg Time Delivery (ns): 18626030
+[10 to 1 Rabbit] Avg Time Processing (ns): 1208
+-------------------------------------------------------------------------------
+Mode: manualAck
+[10 to 1 Rabbit] Avg Time Delivery (ns): 15637989
+[10 to 1 Rabbit] Avg Time Processing (ns): 1400
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 1 Rabbit] Avg Time Delivery (ns): 16679126
+[10 to 1 Rabbit] Avg Time Processing (ns): 21678
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 1 Rabbit] Avg Time Delivery (ns): 26682147
+[10 to 1 Rabbit] Avg Time Processing (ns): 2785
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 1 Rabbit] Avg Time Delivery (ns): 17695408
+[10 to 1 Rabbit] Avg Time Processing (ns): 3571
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 3 Rabbit] Avg Time Delivery (ns): 1534431
+[1 to 3 Rabbit] Avg Time Processing (ns): 28356
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 3 Rabbit] Avg Time Delivery (ns): 2049083
+[1 to 3 Rabbit] Avg Time Processing (ns): 1647
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 3 Rabbit] Avg Time Delivery (ns): 2961444
+[1 to 3 Rabbit] Avg Time Processing (ns): 1521
+-------------------------------------------------------------------------------
+Mode: manualAck
+[1 to 3 Rabbit] Avg Time Delivery (ns): 2682852
+[1 to 3 Rabbit] Avg Time Processing (ns): 35931
+-------------------------------------------------------------------------------
+Mode: manualAck
+[1 to 3 Rabbit] Avg Time Delivery (ns): 2246521
+[1 to 3 Rabbit] Avg Time Processing (ns): 30070
+-------------------------------------------------------------------------------
+Mode: manualAck
+[1 to 3 Rabbit] Avg Time Delivery (ns): 2167607
+[1 to 3 Rabbit] Avg Time Processing (ns): 25517
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 3 Rabbit] Avg Time Delivery (ns): 3025465
+[1 to 3 Rabbit] Avg Time Processing (ns): 159455
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 3 Rabbit] Avg Time Delivery (ns): 2588500
+[1 to 3 Rabbit] Avg Time Processing (ns): 948674
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 3 Rabbit] Avg Time Delivery (ns): 2912935
+[1 to 3 Rabbit] Avg Time Processing (ns): 298379
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 3 Rabbit] Avg Time Delivery (ns): 7595561
+[3 to 3 Rabbit] Avg Time Processing (ns): 2042
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 3 Rabbit] Avg Time Delivery (ns): 7451847
+[3 to 3 Rabbit] Avg Time Processing (ns): 46682
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 3 Rabbit] Avg Time Delivery (ns): 7328348
+[3 to 3 Rabbit] Avg Time Processing (ns): 31752
+-------------------------------------------------------------------------------
+Mode: manualAck
+[3 to 3 Rabbit] Avg Time Delivery (ns): 5279011
+[3 to 3 Rabbit] Avg Time Processing (ns): 200674
+-------------------------------------------------------------------------------
+Mode: manualAck
+[3 to 3 Rabbit] Avg Time Delivery (ns): 9516445
+[3 to 3 Rabbit] Avg Time Processing (ns): 47272
+-------------------------------------------------------------------------------
+Mode: manualAck
+[3 to 3 Rabbit] Avg Time Delivery (ns): 6940808
+[3 to 3 Rabbit] Avg Time Processing (ns): 2440
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 3 Rabbit] Avg Time Delivery (ns): 7647122
+[3 to 3 Rabbit] Avg Time Processing (ns): 257800
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 3 Rabbit] Avg Time Delivery (ns): 7742993
+[3 to 3 Rabbit] Avg Time Processing (ns): 509501
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 3 Rabbit] Avg Time Delivery (ns): 8193558
+[3 to 3 Rabbit] Avg Time Processing (ns): 554424
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 3 Rabbit] Avg Time Delivery (ns): 14581443
+[10 to 3 Rabbit] Avg Time Processing (ns): 25555
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 3 Rabbit] Avg Time Delivery (ns): 17804452
+[10 to 3 Rabbit] Avg Time Processing (ns): 34108
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 3 Rabbit] Avg Time Delivery (ns): 13211080
+[10 to 3 Rabbit] Avg Time Processing (ns): 353474
+-------------------------------------------------------------------------------
+Mode: manualAck
+[10 to 3 Rabbit] Avg Time Delivery (ns): 16086609
+[10 to 3 Rabbit] Avg Time Processing (ns): 1501
+-------------------------------------------------------------------------------
+Mode: manualAck
+[10 to 3 Rabbit] Avg Time Delivery (ns): 26170133
+[10 to 3 Rabbit] Avg Time Processing (ns): 26741
+-------------------------------------------------------------------------------
+Mode: manualAck
+[10 to 3 Rabbit] Avg Time Delivery (ns): 13514382
+[10 to 3 Rabbit] Avg Time Processing (ns): 25883
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 3 Rabbit] Avg Time Delivery (ns): 15520813
+[10 to 3 Rabbit] Avg Time Processing (ns): 438107
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 3 Rabbit] Avg Time Delivery (ns): 21043327
+[10 to 3 Rabbit] Avg Time Processing (ns): 170329
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 3 Rabbit] Avg Time Delivery (ns): 17014883
+[10 to 3 Rabbit] Avg Time Processing (ns): 360026
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 10 Rabbit] Avg Time Delivery (ns): 2910740
+[1 to 10 Rabbit] Avg Time Processing (ns): 63056
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 10 Rabbit] Avg Time Delivery (ns): 2214722
+[1 to 10 Rabbit] Avg Time Processing (ns): 363626
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 10 Rabbit] Avg Time Delivery (ns): 2171699
+[1 to 10 Rabbit] Avg Time Processing (ns): 419471
+-------------------------------------------------------------------------------
+Mode: manualAck
+[1 to 10 Rabbit] Avg Time Delivery (ns): 3239747
+[1 to 10 Rabbit] Avg Time Processing (ns): 456790
+-------------------------------------------------------------------------------
+Mode: manualAck
+[1 to 10 Rabbit] Avg Time Delivery (ns): 3349040
+[1 to 10 Rabbit] Avg Time Processing (ns): 20239
+-------------------------------------------------------------------------------
+Mode: manualAck
+[1 to 10 Rabbit] Avg Time Delivery (ns): 2492047
+[1 to 10 Rabbit] Avg Time Processing (ns): 1894
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 10 Rabbit] Avg Time Delivery (ns): 2599251
+[1 to 10 Rabbit] Avg Time Processing (ns): 52253
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 10 Rabbit] Avg Time Delivery (ns): 3333088
+[1 to 10 Rabbit] Avg Time Processing (ns): 6618
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 10 Rabbit] Avg Time Delivery (ns): 2530783
+[1 to 10 Rabbit] Avg Time Processing (ns): 140275
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 10 Rabbit] Avg Time Delivery (ns): 8805766
+[3 to 10 Rabbit] Avg Time Processing (ns): 59853
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 10 Rabbit] Avg Time Delivery (ns): 8364290
+[3 to 10 Rabbit] Avg Time Processing (ns): 345114
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 10 Rabbit] Avg Time Delivery (ns): 7618341
+[3 to 10 Rabbit] Avg Time Processing (ns): 308947
+-------------------------------------------------------------------------------
+Mode: manualAck
+[3 to 10 Rabbit] Avg Time Delivery (ns): 9568254
+[3 to 10 Rabbit] Avg Time Processing (ns): 17769
+-------------------------------------------------------------------------------
+Mode: manualAck
+[3 to 10 Rabbit] Avg Time Delivery (ns): 6555621
+[3 to 10 Rabbit] Avg Time Processing (ns): 251519
+-------------------------------------------------------------------------------
+Mode: manualAck
+[3 to 10 Rabbit] Avg Time Delivery (ns): 9362094
+[3 to 10 Rabbit] Avg Time Processing (ns): 62965
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 10 Rabbit] Avg Time Delivery (ns): 13012938
+[3 to 10 Rabbit] Avg Time Processing (ns): 305112
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 10 Rabbit] Avg Time Delivery (ns): 10790744
+[3 to 10 Rabbit] Avg Time Processing (ns): 163264
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 10 Rabbit] Avg Time Delivery (ns): 8382600
+[3 to 10 Rabbit] Avg Time Processing (ns): 95548
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 10 Rabbit] Avg Time Delivery (ns): 25765613
+[10 to 10 Rabbit] Avg Time Processing (ns): 29019
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 10 Rabbit] Avg Time Delivery (ns): 24405538
+[10 to 10 Rabbit] Avg Time Processing (ns): 39430
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 10 Rabbit] Avg Time Delivery (ns): 34260158
+[10 to 10 Rabbit] Avg Time Processing (ns): 2936
+-------------------------------------------------------------------------------
+Mode: manualAck
+[10 to 10 Rabbit] Avg Time Delivery (ns): 28903584
+[10 to 10 Rabbit] Avg Time Processing (ns): 1902
+-------------------------------------------------------------------------------
+Mode: manualAck
+[10 to 10 Rabbit] Avg Time Delivery (ns): 45568029
+[10 to 10 Rabbit] Avg Time Processing (ns): 488468
+-------------------------------------------------------------------------------
+Mode: manualAck
+[10 to 10 Rabbit] Avg Time Delivery (ns): 18732780
+[10 to 10 Rabbit] Avg Time Processing (ns): 27883
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 10 Rabbit] Avg Time Delivery (ns): 25427484
+[10 to 10 Rabbit] Avg Time Processing (ns): 440038
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 10 Rabbit] Avg Time Delivery (ns): 36780377
+[10 to 10 Rabbit] Avg Time Processing (ns): 339880
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 10 Rabbit] Avg Time Delivery (ns): 40266715
+[10 to 10 Rabbit] Avg Time Processing (ns): 87902
+-------------------------------------------------------------------------------
