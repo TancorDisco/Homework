@@ -5,6 +5,7 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import ru.sweetbun.benchmark.kafka.OneToOneKafka;
+import ru.sweetbun.benchmark.kafka.ThreeToThreeKafka;
 import ru.sweetbun.benchmark.rabbit.*;
 
 public class BenchmarkRunner {
@@ -18,6 +19,7 @@ public class BenchmarkRunner {
                 .include(ThreeToThreeRabbit.class.getSimpleName())
                 .include(TenToTenRabbit.class.getSimpleName())*/
                 .include(OneToOneKafka.class.getSimpleName())
+                .include(ThreeToThreeKafka.class.getSimpleName())
                 .forks(1)
                 .resultFormat(ResultFormatType.TEXT)
                 .build();
