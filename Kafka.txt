@@ -1,0 +1,324 @@
+Mode: standard
+[1 to 1 Kafka] Avg Time Delivery (ns): 130124
+[1 to 1 Kafka] Avg Time Processing (ns): 6949284
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 1 Kafka] Avg Time Delivery (ns): 117471
+[1 to 1 Kafka] Avg Time Processing (ns): 6764250
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 1 Kafka] Avg Time Delivery (ns): 65303
+[1 to 1 Kafka] Avg Time Processing (ns): 3500235
+-------------------------------------------------------------------------------
+Mode: replication
+[1 to 1 Kafka] Avg Time Delivery (ns): 70286
+[1 to 1 Kafka] Avg Time Processing (ns): 3656324
+-------------------------------------------------------------------------------
+Mode: replication
+[1 to 1 Kafka] Avg Time Delivery (ns): 65402
+[1 to 1 Kafka] Avg Time Processing (ns): 3460015
+-------------------------------------------------------------------------------
+Mode: replication
+[1 to 1 Kafka] Avg Time Delivery (ns): 77703
+[1 to 1 Kafka] Avg Time Processing (ns): 4054241
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 1 Kafka] Avg Time Delivery (ns): 73683
+[1 to 1 Kafka] Avg Time Processing (ns): 3730410
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 1 Kafka] Avg Time Delivery (ns): 69844
+[1 to 1 Kafka] Avg Time Processing (ns): 3594311
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 1 Kafka] Avg Time Delivery (ns): 62678
+[1 to 1 Kafka] Avg Time Processing (ns): 3389530
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 1 Kafka] Avg Time Delivery (ns): 23160
+[3 to 1 Kafka] Avg Time Processing (ns): 774651
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 1 Kafka] Avg Time Delivery (ns): 21240
+[3 to 1 Kafka] Avg Time Processing (ns): 748101
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 1 Kafka] Avg Time Delivery (ns): 27136
+[3 to 1 Kafka] Avg Time Processing (ns): 901418
+-------------------------------------------------------------------------------
+Mode: replication
+[3 to 1 Kafka] Avg Time Delivery (ns): 21403
+[3 to 1 Kafka] Avg Time Processing (ns): 789822
+-------------------------------------------------------------------------------
+Mode: replication
+[3 to 1 Kafka] Avg Time Delivery (ns): 21293
+[3 to 1 Kafka] Avg Time Processing (ns): 733563
+-------------------------------------------------------------------------------
+Mode: replication
+[3 to 1 Kafka] Avg Time Delivery (ns): 24026
+[3 to 1 Kafka] Avg Time Processing (ns): 779257
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 1 Kafka] Avg Time Delivery (ns): 21414
+[3 to 1 Kafka] Avg Time Processing (ns): 732760
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 1 Kafka] Avg Time Delivery (ns): 22344
+[3 to 1 Kafka] Avg Time Processing (ns): 738427
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 1 Kafka] Avg Time Delivery (ns): 21383
+[3 to 1 Kafka] Avg Time Processing (ns): 730715
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 1 Kafka] Avg Time Delivery (ns): 18788
+[10 to 1 Kafka] Avg Time Processing (ns): 267983
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 1 Kafka] Avg Time Delivery (ns): 17764
+[10 to 1 Kafka] Avg Time Processing (ns): 267521
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 1 Kafka] Avg Time Delivery (ns): 17934
+[10 to 1 Kafka] Avg Time Processing (ns): 266585
+-------------------------------------------------------------------------------
+Mode: replication
+[10 to 1 Kafka] Avg Time Delivery (ns): 18949
+[10 to 1 Kafka] Avg Time Processing (ns): 267029
+-------------------------------------------------------------------------------
+Mode: replication
+[10 to 1 Kafka] Avg Time Delivery (ns): 19287
+[10 to 1 Kafka] Avg Time Processing (ns): 268352
+-------------------------------------------------------------------------------
+Mode: replication
+[10 to 1 Kafka] Avg Time Delivery (ns): 19941
+[10 to 1 Kafka] Avg Time Processing (ns): 269979
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 1 Kafka] Avg Time Delivery (ns): 19724
+[10 to 1 Kafka] Avg Time Processing (ns): 281321
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 1 Kafka] Avg Time Delivery (ns): 20672
+[10 to 1 Kafka] Avg Time Processing (ns): 283564
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 1 Kafka] Avg Time Delivery (ns): 20886
+[10 to 1 Kafka] Avg Time Processing (ns): 283032
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 3 Kafka] Avg Time Delivery (ns): 1053989
+[1 to 3 Kafka] Avg Time Processing (ns): 906998025
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 3 Kafka] Avg Time Delivery (ns): 3788240
+[1 to 3 Kafka] Avg Time Processing (ns): 2447581650
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 3 Kafka] Avg Time Delivery (ns): 6737475
+[1 to 3 Kafka] Avg Time Processing (ns): 2128093641
+-------------------------------------------------------------------------------
+Mode: replication
+[1 to 3 Kafka] Avg Time Delivery (ns): 2462108
+[1 to 3 Kafka] Avg Time Processing (ns): 2133564175
+-------------------------------------------------------------------------------
+Mode: replication
+[1 to 3 Kafka] Avg Time Delivery (ns): 2536508
+[1 to 3 Kafka] Avg Time Processing (ns): 2111676191
+-------------------------------------------------------------------------------
+Mode: replication
+[1 to 3 Kafka] Avg Time Delivery (ns): 2568858
+[1 to 3 Kafka] Avg Time Processing (ns): 2111635658
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 3 Kafka] Avg Time Delivery (ns): 2539350
+[1 to 3 Kafka] Avg Time Processing (ns): 2110284700
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 3 Kafka] Avg Time Delivery (ns): 2708058
+[1 to 3 Kafka] Avg Time Processing (ns): 2111041650
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 3 Kafka] Avg Time Delivery (ns): 2518841
+[1 to 3 Kafka] Avg Time Processing (ns): 2111412625
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 3 Kafka] Avg Time Delivery (ns): 1456327
+[3 to 3 Kafka] Avg Time Processing (ns): 767618721
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 3 Kafka] Avg Time Delivery (ns): 1432284
+[3 to 3 Kafka] Avg Time Processing (ns): 768146069
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 3 Kafka] Avg Time Delivery (ns): 1421845
+[3 to 3 Kafka] Avg Time Processing (ns): 683644556
+-------------------------------------------------------------------------------
+Mode: replication
+[3 to 3 Kafka] Avg Time Delivery (ns): 1679857
+[3 to 3 Kafka] Avg Time Processing (ns): 723495097
+-------------------------------------------------------------------------------
+Mode: replication
+[3 to 3 Kafka] Avg Time Delivery (ns): 1468807
+[3 to 3 Kafka] Avg Time Processing (ns): 666409489
+-------------------------------------------------------------------------------
+Mode: replication
+[3 to 3 Kafka] Avg Time Delivery (ns): 1933947
+[3 to 3 Kafka] Avg Time Processing (ns): 704540233
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 3 Kafka] Avg Time Delivery (ns): 1547364
+[3 to 3 Kafka] Avg Time Processing (ns): 744764435
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 3 Kafka] Avg Time Delivery (ns): 1238830
+[3 to 3 Kafka] Avg Time Processing (ns): 648689279
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 3 Kafka] Avg Time Delivery (ns): 1441286
+[3 to 3 Kafka] Avg Time Processing (ns): 702389294
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 3 Kafka] Avg Time Delivery (ns): 929765
+[10 to 3 Kafka] Avg Time Processing (ns): 232378399
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 3 Kafka] Avg Time Delivery (ns): 875737
+[10 to 3 Kafka] Avg Time Processing (ns): 204529260
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 3 Kafka] Avg Time Delivery (ns): 846207
+[10 to 3 Kafka] Avg Time Processing (ns): 219261776
+-------------------------------------------------------------------------------
+Mode: replication
+[10 to 3 Kafka] Avg Time Delivery (ns): 827412
+[10 to 3 Kafka] Avg Time Processing (ns): 204427389
+-------------------------------------------------------------------------------
+Mode: replication
+[10 to 3 Kafka] Avg Time Delivery (ns): 985779
+[10 to 3 Kafka] Avg Time Processing (ns): 211256212
+-------------------------------------------------------------------------------
+Mode: replication
+[10 to 3 Kafka] Avg Time Delivery (ns): 980390
+[10 to 3 Kafka] Avg Time Processing (ns): 210844022
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 3 Kafka] Avg Time Delivery (ns): 859722
+[10 to 3 Kafka] Avg Time Processing (ns): 210793726
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 3 Kafka] Avg Time Delivery (ns): 824419
+[10 to 3 Kafka] Avg Time Processing (ns): 214634905
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 3 Kafka] Avg Time Delivery (ns): 975845
+[10 to 3 Kafka] Avg Time Processing (ns): 212674729
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 10 Kafka] Avg Time Delivery (ns): 2369955
+[1 to 10 Kafka] Avg Time Processing (ns): 2643126100
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 10 Kafka] Avg Time Delivery (ns): 6109640
+[1 to 10 Kafka] Avg Time Processing (ns): 9499523580
+-------------------------------------------------------------------------------
+Mode: standard
+[1 to 10 Kafka] Avg Time Delivery (ns): 6382840
+[1 to 10 Kafka] Avg Time Processing (ns): 9512780320
+-------------------------------------------------------------------------------
+Mode: replication
+[1 to 10 Kafka] Avg Time Delivery (ns): 5422460
+[1 to 10 Kafka] Avg Time Processing (ns): 9514586940
+-------------------------------------------------------------------------------
+Mode: replication
+[1 to 10 Kafka] Avg Time Delivery (ns): 5796900
+[1 to 10 Kafka] Avg Time Processing (ns): 9511780360
+-------------------------------------------------------------------------------
+Mode: replication
+[1 to 10 Kafka] Avg Time Delivery (ns): 5417540
+[1 to 10 Kafka] Avg Time Processing (ns): 9504940040
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 10 Kafka] Avg Time Delivery (ns): 5702660
+[1 to 10 Kafka] Avg Time Processing (ns): 9511464680
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 10 Kafka] Avg Time Delivery (ns): 5313140
+[1 to 10 Kafka] Avg Time Processing (ns): 9512396900
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[1 to 10 Kafka] Avg Time Delivery (ns): 5568840
+[1 to 10 Kafka] Avg Time Processing (ns): 9515472980
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 10 Kafka] Avg Time Delivery (ns): 3498069
+[3 to 10 Kafka] Avg Time Processing (ns): 3655532307
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 10 Kafka] Avg Time Delivery (ns): 3297878
+[3 to 10 Kafka] Avg Time Processing (ns): 3394498428
+-------------------------------------------------------------------------------
+Mode: standard
+[3 to 10 Kafka] Avg Time Delivery (ns): 2795746
+[3 to 10 Kafka] Avg Time Processing (ns): 3170623080
+-------------------------------------------------------------------------------
+Mode: replication
+[3 to 10 Kafka] Avg Time Delivery (ns): 3118693
+[3 to 10 Kafka] Avg Time Processing (ns): 3171275113
+-------------------------------------------------------------------------------
+Mode: replication
+[3 to 10 Kafka] Avg Time Delivery (ns): 2351927
+[3 to 10 Kafka] Avg Time Processing (ns): 2640884377
+-------------------------------------------------------------------------------
+Mode: replication
+[3 to 10 Kafka] Avg Time Delivery (ns): 3864830
+[3 to 10 Kafka] Avg Time Processing (ns): 3659012953
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 10 Kafka] Avg Time Delivery (ns): 2909421
+[3 to 10 Kafka] Avg Time Processing (ns): 3395585650
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 10 Kafka] Avg Time Delivery (ns): 3298606
+[3 to 10 Kafka] Avg Time Processing (ns): 3169774406
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[3 to 10 Kafka] Avg Time Delivery (ns): 2858973
+[3 to 10 Kafka] Avg Time Processing (ns): 3169297646
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 10 Kafka] Avg Time Delivery (ns): 2149181
+[10 to 10 Kafka] Avg Time Processing (ns): 1105201516
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 10 Kafka] Avg Time Delivery (ns): 2136458
+[10 to 10 Kafka] Avg Time Processing (ns): 950999248
+-------------------------------------------------------------------------------
+Mode: standard
+[10 to 10 Kafka] Avg Time Delivery (ns): 1785784
+[10 to 10 Kafka] Avg Time Processing (ns): 951552778
+-------------------------------------------------------------------------------
+Mode: replication
+[10 to 10 Kafka] Avg Time Delivery (ns): 1813740
+[10 to 10 Kafka] Avg Time Processing (ns): 950679176
+-------------------------------------------------------------------------------
+Mode: replication
+[10 to 10 Kafka] Avg Time Delivery (ns): 1803912
+[10 to 10 Kafka] Avg Time Processing (ns): 950581368
+-------------------------------------------------------------------------------
+Mode: replication
+[10 to 10 Kafka] Avg Time Delivery (ns): 1789996
+[10 to 10 Kafka] Avg Time Processing (ns): 950267482
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 10 Kafka] Avg Time Delivery (ns): 1866952
+[10 to 10 Kafka] Avg Time Processing (ns): 951080338
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 10 Kafka] Avg Time Delivery (ns): 1794206
+[10 to 10 Kafka] Avg Time Processing (ns): 950567522
+-------------------------------------------------------------------------------
+Mode: largeMessage
+[10 to 10 Kafka] Avg Time Delivery (ns): 1590055
+[10 to 10 Kafka] Avg Time Processing (ns): 819254739
+-------------------------------------------------------------------------------

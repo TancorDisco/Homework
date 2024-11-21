@@ -27,7 +27,6 @@ spring:
     password:
     timeout: 6000
 
-
 springdoc:
   api-docs:
     enabled: true
