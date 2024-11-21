@@ -8,4 +8,9 @@
     <include file="/db/changelog/changeset/V2__create_places_table.xml"/>
     <include file="/db/changelog/changeset/V3__create_events_table.xml"/>
 
+    <include file="/db/changelog/changeset/V4__create_users_table.xml"/>
+    <include file="/db/changelog/changeset/V5__create_roles_table.xml"/>
+    <include file="/db/changelog/changeset/V6__create_user_roles_table.xml"/>
+    <include file="/db/changelog/changeset/V7__insert_roles.xml"/>
+
 </databaseChangeLog>
