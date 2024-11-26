@@ -8,21 +8,12 @@
         <encoder charset="UTF-8"
                  class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
-                <timestamp>
-                    <timeZone>UTC</timeZone>
-                </timestamp>
-                <pattern>
-                    <pattern>
-                        {
-                        "logLevel": "%level",
-                        "serviceName": "${springAppName:-}",
-                        "pid": "${PID:-}",
-                        "thread": "%thread",
-                        "class": "%logger{40}",
-                        "message": "%message"
-                        }
-                    </pattern>
-                </pattern>
+                <mdc/>
+                <timestamp/>
+                <level/>
+                <threadName/>
+                <loggerName/>
+                <message/>
             </providers>
         </encoder>
     </appender>

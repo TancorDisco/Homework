@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,8 +17,11 @@ import ru.sweetbun.DTO.CurrencyRateResponse;
 import ru.sweetbun.DTO.ErrorResponse;
 import ru.sweetbun.service.CurrencyService;
 
+import java.util.UUID;
+
+@Slf4j
 @RestController
-@RequestMapping("/currencies")
+@RequestMapping("/currencies" )
 public class CurrencyController {
 
     private final CurrencyService currencyService;
@@ -39,9 +44,16 @@ public class CurrencyController {
     })
     @GetMapping("rates/{code}")
     public ResponseEntity<?> getCurrencyRate(@PathVariable String code) {
-        Double rate = currencyService.getCurrencyRate(code);
-        var response = new CurrencyRateResponse(code, rate);
-        return ResponseEntity.ok(response);
+        String requestId = UUID.randomUUID().toString();
+
+        try (var ignored = MDC.putCloseable("requestId", requestId)) {
+            log.info("Processing request");
+            try (var ignored2 = MDC.putCloseable(("code"), code)) {
+                Double rate = currencyService.getCurrencyRate(code);
+                var response = new CurrencyRateResponse(code, rate);
+                return ResponseEntity.ok(response);
+            }
+        }
     }
 
     @PreAuthorize("hasRole('ADMIN')")

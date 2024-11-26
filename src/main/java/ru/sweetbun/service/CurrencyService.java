@@ -1,6 +1,7 @@
 package ru.sweetbun.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sweetbun.DTO.ConvertRequest;
@@ -19,8 +20,9 @@ public class CurrencyService {
     }
 
     public Double getCurrencyRate(String code) {
+        log.info("Request ID in service");
         validateCurrencyCode(code);
-
+        log.info("Validation was successful for the code");
         return externalCurrencyService.getCurrencyRate(code);
     }
 
