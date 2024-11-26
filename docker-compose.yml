@@ -1,45 +1,58 @@
 services:
   elasticsearch:
-    image: elasticsearch:8.16.1
-    volumes:
-      - ./configs/elasticsearch/config.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-      - ./docker_volumes/elasticsearch/data:/usr/share/elasticsearch/data
-    environment:
-      ES_JAVA_OPTS: "-Xmx512m -Xms512m"
-      discovery.type: single-node
-    networks:
-      - elk
+    image: elasticsearch:7.9.1
+    container_name: elasticsearch
     ports:
       - "9200:9200"
       - "9300:9300"
+    volumes:
+      - test_data:/usr/share/elasticsearch/data/
+      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    environment:
+      - discovery.type=single-node
+      - http.host=0.0.0.0
+      - transport.host=0.0.0.0
+      - xpack.security.enabled=false
+      - xpack.monitoring.enabled=false
+      - cluster.name=elasticsearch
+      - bootstrap.memory_lock=true
+    networks:
+      - elk
 
   logstash:
-    image: logstash:8.16.1
-    volumes:
-      - ./configs/logstash/config.yml:/usr/share/logstash/config/logstash.yml:ro
-      - ./configs/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml:ro
-    environment:
-      LS_JAVA_OPTS: "-Xmx512m -Xms512m"
+    image: logstash:7.9.1
+    container_name: logstash
     ports:
       - "5044:5044"
-      - "5000:5000"
       - "9600:9600"
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ls_data:/usr/share/logstash/data
+
     networks:
       - elk
     depends_on:
       - elasticsearch
 
   kibana:
-    image: kibana:8.16.1
-    depends_on:
-      - elasticsearch
-    volumes:
-      - ./configs/kibana/config.yml:/usr/share/kibana/config/kibana.yml:ro
-    networks:
-      - elk
+    image: kibana:7.9.1
+    container_name: kibana
     ports:
       - "5601:5601"
+    volumes:
+      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+      - kb_data:/usr/share/kibana/data
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
 
 networks:
   elk:
     driver: bridge
+
+volumes:
+  test_data:
+  ls_data:
+  kb_data:
