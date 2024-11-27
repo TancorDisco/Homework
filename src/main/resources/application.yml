@@ -52,3 +52,12 @@ jwt:
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} | %-5level | %logger | %m %X%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always

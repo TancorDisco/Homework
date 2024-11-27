@@ -1,5 +1,7 @@
 package ru.sweetbun.controller;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,10 +27,12 @@ import java.util.UUID;
 public class CurrencyController {
 
     private final CurrencyService currencyService;
+    private final Counter counter;
 
     @Autowired
-    public CurrencyController(CurrencyService currencyService) {
+    public CurrencyController(CurrencyService currencyService, MeterRegistry meterRegistry) {
         this.currencyService = currencyService;
+        this.counter = meterRegistry.counter("my-counter");
     }
 
     @Operation(summary = "Get the currency rate by currency code")
@@ -44,6 +48,7 @@ public class CurrencyController {
     })
     @GetMapping("rates/{code}")
     public ResponseEntity<?> getCurrencyRate(@PathVariable String code) {
+        this.counter.increment();
         String requestId = UUID.randomUUID().toString();
 
         try (var ignored = MDC.putCloseable("requestId", requestId)) {

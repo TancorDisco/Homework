@@ -48,6 +48,12 @@ services:
     depends_on:
       - elasticsearch
 
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+
 networks:
   elk:
     driver: bridge
