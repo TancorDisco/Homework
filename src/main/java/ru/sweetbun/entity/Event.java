@@ -64,4 +64,5 @@ public class Event implements Identifiable{
         this.favoritesCount = savedState.getFavoritesCount();
         this.date = savedState.getDate();
         this.place = savedState.getPlace();
-    }}
+    }
+}
